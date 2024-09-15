@@ -168,50 +168,56 @@ const AddProperty = () => {
       return newState;
     });
   };
-
+  const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+  const imgbbUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`;
+  
   const handleFileChange = async (event) => {
     const files = event.target.files;
     const uploadPromises = [];
 
     for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const formData = new FormData();
-      formData.append("image", file);
+        const file = files[i];
+        const formData = new FormData();
+        formData.append("image", file);
 
-      // Push each upload promise to the array
-      uploadPromises.push(
-        axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`,
-          formData
-        )
-      );
+        // Push each upload promise to the array
+        uploadPromises.push(
+          axios.post(corsProxy + imgbbUrl, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        );
     }
 
     try {
-      // Wait for all upload promises to resolve
-      const responses = await Promise.all(uploadPromises);
-      console.log(responses);
-      // Extract the image URLs from responses
-      const uploadedImages = responses.map(
-        (response) => response.data.data.display_url
-      );
-      console.log(uploadedImages);
-      // Update galleryImages in formData state
-      setFormData((prevState) => ({
-        ...prevState,
-        galleryImages: [...prevState.galleryImages, ...uploadedImages],
-      }));
-      toast.success("Images uploaded successfully.", {
-        position: "top-center",
-      });
+        // Wait for all upload promises to resolve
+        const responses = await Promise.all(uploadPromises);
+        console.log(responses);
+        // Extract the image URLs from responses
+        const uploadedImages = responses.map(
+            (response) => response.data.data.display_url
+        );
+        console.log(uploadedImages);
+        // Update galleryImages in formData state
+        setFormData((prevState) => ({
+            ...prevState,
+            galleryImages: [...prevState.galleryImages, ...uploadedImages],
+        }));
+        toast.success("Images uploaded successfully.", {
+            position: "top-center",
+        });
     } catch (error) {
-      console.error("Error uploading images:", error);
-      toast.error("Failed to upload images. Please try again.", {
-        position: "top-center",
-      });
+        console.error("Error uploading images:", error);
+        toast.error("Failed to upload images. Please try again.", {
+            position: "top-center",
+        });
     }
-  };
+};
+
 
   const handleGalleryImageDelete = async (id, imageUrl) => {
+    console.log(id, imageUrl)
     setLoading(true);
     try {
       const response = await axios.delete(`http://localhost:5000/property/${id}/galleryImage`, {
@@ -234,6 +240,7 @@ const AddProperty = () => {
   };
 
   const handleBankImageDelete = async (id, imageUrl) => {
+    console.log(id, imageUrl)
     setLoading(true);
     try {
       const response = await axios.delete(`http://localhost:5000/property/${id}/bankImage`, {
@@ -267,10 +274,11 @@ const AddProperty = () => {
 
       // Push each upload promise to the array
       uploadPromises.push(
-        axios.post(
-          `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_API_KEY}`,
-          formData
-        )
+        axios.post(corsProxy + imgbbUrl, formData, {
+          headers: {
+              'Content-Type': 'multipart/form-data'
+          }
+      })
       );
     }
 
@@ -304,11 +312,11 @@ const AddProperty = () => {
     const formData = new FormData();
     formData.append("image", file);
 
-    axios
-      .post(
-        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_API_KEY}`,
-        formData
-      )
+    axios.post(corsProxy + imgbbUrl, formData, {
+      headers: {
+          'Content-Type': 'multipart/form-data'
+      }
+  })
       .then((response) => {
         const imageUrl = response.data.data.url;
         toast.success("Image Successfully hosted.", {
@@ -792,13 +800,17 @@ const handleRemoveAmenity = (amenityId) => {
            formData?.galleryImages?.map((img, index) => (
             <div key={index} className="relative">
               <img className="w-[100px] h-[100px]" src={img} />
-            <button
-                    type="button"
-                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"
-                    onClick={() => handleGalleryImageDelete(propertyToEdit._id, img)}
-                  >
-                    <FaTrash />
-              </button>
+              {propertyToEdit && (
+  <button
+    type="button"
+    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"
+    onClick={() => handleGalleryImageDelete(propertyToEdit._id, img)}
+  >
+    <FaTrash />
+  </button>
+)}
+
+
             </div>
            ))
           }
@@ -1098,13 +1110,13 @@ const handleRemoveAmenity = (amenityId) => {
           {
            formData?.bankImages?.map((img, index) => (<div key={index} className="relative">
             <img className="w-[100px] h-[100px]" src={img} />
-            <button
+            {propertyToEdit &&( <button
                     type="button"
                     className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"
                     onClick={() => handleBankImageDelete(propertyToEdit._id, img)}
                   >
                     <FaTrash />
-              </button>
+              </button>)}
             </div>
            ))
           }
