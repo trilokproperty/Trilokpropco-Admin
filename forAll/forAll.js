@@ -1,1 +1,1 @@
-export const endPoint="http://localhost:5000"
+export const endPoint="https://trilokpropco-backend.vercel.app"
