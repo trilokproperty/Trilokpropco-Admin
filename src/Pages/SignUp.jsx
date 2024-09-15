@@ -37,6 +37,7 @@ const SignUp = () => {
   return (
     <div className="md:w-1/3 w-[80%] mx-auto my-16">
         <h3 className='text-3xl font-semibold text-center my-7'>Sign Up</h3>
+        <h2 className='text-xl font-normal text-center my-7'>Only Admin Can Add User.</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label className="input input-bordered flex items-center gap-2">
           <svg
