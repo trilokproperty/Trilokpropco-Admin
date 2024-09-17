@@ -10,7 +10,8 @@ const Inquiries = () => {
       const fetchData = async () => {
         try {
           const response = await axios.get(`${endPoint}/inquire`);
-          setInquiries(response.data);
+          const data = (response.data).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+          setInquiries(data);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -19,7 +20,7 @@ const Inquiries = () => {
       fetchData();
     }, []);
     console.log(inquiries)
-  const inquiriesPerPage = 5; // Adjust as needed
+  const inquiriesPerPage = 10; // Adjust as needed
   const getVisibleinquiries = () => {
     const startIndex = (currentPage - 1) * inquiriesPerPage;
     const endIndex = Math.min(startIndex + inquiriesPerPage, inquiries?.length || 0);

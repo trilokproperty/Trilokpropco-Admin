@@ -33,7 +33,8 @@ const Properties = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${endPoint}/property`);
-        setProperties(response.data);
+        const data = (response.data).sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        setProperties(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

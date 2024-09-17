@@ -75,6 +75,7 @@ const AddProperty = () => {
     video: "",
     for: "",
     created_at:"",
+    category:"",
     isFeatured:false,
     exclusive:false
   });
@@ -406,6 +407,7 @@ const AddProperty = () => {
         setFormData({
           name: "",
           type: "",
+          category:"",
           developer: "",
           location: "",
           status: "",
@@ -630,6 +632,20 @@ const handleRemoveAmenity = (amenityId) => {
             <option value="Sale">Sale</option>
             <option value="Rent">Rent</option>
             <option value="Buy">Buy</option>
+          </select>
+        </div>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Property Category</span>
+          </label>
+          <select className="border p-4 rounded-lg" 
+            value={formData.category}
+            name="category"
+            onChange={handleChange}
+            required>
+            <option>Property Category?</option>
+            <option value="residential">Residential Property</option>
+            <option value="commercial">Commercial Property</option>
           </select>
         </div>
 
