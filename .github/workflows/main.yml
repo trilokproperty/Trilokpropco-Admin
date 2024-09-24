@@ -18,17 +18,17 @@ jobs:
         with:
           node-version: '18'
 
-    - name: Sync Frontend Directory
-      run: |
-        rsync -av --delete /home/ubuntu/actions-runner/_work/Trilokpropco-Dashboard/Trilokpropco-Dashboard/ /home/ubuntu/Trilokpropco-Dashboard/
+      - name: Sync Frontend Directory
+        run: |
+          rsync -av --delete /home/ubuntu/actions-runner/_work/Trilokpropco-Dashboard/Trilokpropco-Dashboard/ /home/ubuntu/Trilokpropco-Dashboard/
 
-    - name: Build and Deploy Frontend
-      run: |
-        cd /home/ubuntu/Trilokpropco-Dashboard
-        npm install
-        npm run build
-        sudo cp -r ./dist/* /var/www/html  # Make sure the frontend build outputs to 'dist'
+      - name: Build and Deploy Frontend
+        run: |
+          cd /home/ubuntu/Trilokpropco-Dashboard
+          npm install
+          npm run build
+          sudo cp -r ./dist/* /var/www/html  # Make sure the frontend build outputs to 'dist'
 
-    - name: Restart Nginx
-      run: |
-        sudo systemctl restart nginx
+      - name: Restart Nginx
+        run: |
+          sudo systemctl restart nginx
