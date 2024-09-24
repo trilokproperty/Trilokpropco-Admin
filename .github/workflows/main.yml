@@ -1,0 +1,34 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches:
+      - main  # Ensure this matches your deployment branch
+
+jobs:
+  deploy-frontend:
+    runs-on: self-hosted
+
+  steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'  # Frontend using Node.js 18
+
+    - name: Sync Frontend Directory
+      run: |
+        rsync -av --delete /home/ubuntu/actions-runner/_work/Trilokpropco-Dashboard/Trilokpropco-Dashboard/ /home/ubuntu/Trilokpropco-Dashboard/
+
+    - name: Build and Deploy Frontend
+      run: |
+        cd /home/ubuntu/Trilokpropco-Dashboard
+        npm install
+        npm run build
+        sudo cp -r ./dist/* /var/www/html  # Make sure the frontend build outputs to 'dist'
+
+    - name: Restart Nginx
+      run: |
+        sudo systemctl restart nginx
