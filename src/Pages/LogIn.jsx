@@ -34,7 +34,7 @@ const handleChange = (e) => {
 
     return (
     <div className="md:w-1/3 w-[80%] mx-auto my-16">
-        <h3 className='text-3xl font-semibold text-center my-7'>Log In</h3>
+        <h3 className='text-3xl font-semibold text-center my-7'>Log In:</h3>
        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label className="input input-bordered flex items-center gap-2">
           <svg
