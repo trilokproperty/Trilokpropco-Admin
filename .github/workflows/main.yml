@@ -20,7 +20,7 @@ jobs:
 
       - name: Sync Frontend Directory
         run: |
-          rsync -av --delete /home/ubuntu/actions-runner/_work/Trilokpropco-Dashboard/Trilokpropco-Dashboard/ /home/ubuntu/Trilokpropco-Dashboard/
+          sudo rsync -av --delete /home/ubuntu/actions-runner/_work/Trilokpropco-Dashboard/Trilokpropco-Dashboard/ /home/ubuntu/Trilokpropco-Dashboard/
 
       - name: Build and Deploy Frontend
         run: |
