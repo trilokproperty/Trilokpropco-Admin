@@ -18,7 +18,7 @@ const Dashboard = () => {
   const [isPropertiesSubMenuOpen, setIsPropertiesSubMenuOpen] = useState(false);
   const [isBlogsSubMenuOpen, setIsBlogsSubMenuOpen] = useState(false);
   const [isHomeSubMenuOpen, setIsHomeSubMenuOpen] = useState(false);
-  const { logout } = useContext(AuthContext);
+  const { logout, user } = useContext(AuthContext);
 
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -330,6 +330,9 @@ const Dashboard = () => {
               >
                 <li onClick={handleLogOut}>
                   <a>Logout</a>
+                </li>
+                <li>
+                 <Link to={`changepass/${user?._id}`}>Change Password</Link>
                 </li>
               </ul>
             </div>

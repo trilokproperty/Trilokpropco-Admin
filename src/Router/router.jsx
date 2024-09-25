@@ -22,6 +22,8 @@ import SignUp from "../Pages/SignUp";
 import LogIn from "../Pages/LogIn";
 import PrivateRoute from "./privateRoute";
 import User from "../Pages/User";
+import { endPoint } from "../../forAll/forAll";
+import ChangePass from "../Pages/ChangePass";
 
 
 export const router = createBrowserRouter([
@@ -109,6 +111,11 @@ export const router = createBrowserRouter([
                 path:'footer',
                 element:<PrivateRoute><Footer /></PrivateRoute>
             },
+            {
+                path: 'changepass/:id',
+                element: <ChangePass />,
+                loader: ({ params }) => fetch(`${endPoint}/user/${params._id}`)
+              },
         ]
     },
     {
