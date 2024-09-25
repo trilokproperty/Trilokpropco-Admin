@@ -12,6 +12,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { BiCategory } from "react-icons/bi";
 import { TbLayoutBottombar, TbLayoutNavbar } from "react-icons/tb";
 import { AuthContext } from "./AuthContext/AuthContext";
+import { FaMeta } from "react-icons/fa6";
 
 const Dashboard = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -231,6 +232,16 @@ const Dashboard = () => {
               >
                 <RiContactsLine />
                 <span className="sidebar-text">Inquiries</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/meta"}
+                className="p-3 bg-[#7e7e7e1a] rounded flex items-center gap-2 side-li mt-2 "
+              >
+                <FaMeta />
+
+                <span className="sidebar-text">Footer</span>
               </Link>
             </li>
             <li>

@@ -24,6 +24,7 @@ import PrivateRoute from "./privateRoute";
 import User from "../Pages/User";
 import { endPoint } from "../../forAll/forAll";
 import ChangePass from "../Pages/ChangePass";
+import MetaTag from "../Pages/MetaTag";
 
 
 export const router = createBrowserRouter([
@@ -110,6 +111,10 @@ export const router = createBrowserRouter([
             {
                 path:'footer',
                 element:<PrivateRoute><Footer /></PrivateRoute>
+            },
+            {
+                path:'meta',
+                element:<PrivateRoute><MetaTag /></PrivateRoute>
             },
             {
                 path: 'changepass/:id',
