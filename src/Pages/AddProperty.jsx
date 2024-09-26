@@ -31,6 +31,8 @@ const AddProperty = () => {
   console.log(propertyToEdit)
   const [formData, setFormData] = useState({
     name: "",
+    metaTitle: "",
+    metaDescription: "",
     type: "",
     developer: "",
     location: "",
@@ -408,6 +410,8 @@ const AddProperty = () => {
           name: "",
           type: "",
           category:"",
+          metaTitle:"",
+          metaDescription:"",
           developer: "",
           location: "",
           status: "",
@@ -1138,7 +1142,35 @@ const handleRemoveAmenity = (amenityId) => {
           }
           </div>
         </div>
-
+        <hr />
+        <h3>FOR SEO</h3>
+        <hr />
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Meta Title</span>
+          </label>
+          <input
+            type="text"
+            name="metaTitle"
+            value={formData.metaTitle}
+            onChange={handleChange}
+            className="input input-bordered"
+            required
+          />
+        </div>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Meta Description</span>
+          </label>
+          <input
+            type="text"
+            name="metaDescription"
+            value={formData.metaDescription}
+            onChange={handleChange}
+            className="input input-bordered"
+            required
+          />
+        </div>
         <button
          type="submit"
          disabled={loading}
