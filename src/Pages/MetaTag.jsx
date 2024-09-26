@@ -50,15 +50,21 @@ const MetaTag = () => {
     // Handle form submission (Add or Update)
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+    
         const formData = new FormData();
-        Object.keys(metaData).forEach(key => {
-            formData.append(key, metaData[key]);
-        });
-
+        
+        // Append other fields to FormData
+        formData.append('metaTitle', metaData.metaTitle);
+        formData.append('metaDescription', metaData.metaDescription);
+    
+        // Conditionally append the image if it's been updated
+        if (metaData.image) {
+            formData.append('FeaturedImage', metaData.image);
+        }
+    
         const url = isUpdating ? `${endPoint}/meta/update/${existingMeta._id}` : `${endPoint}/meta/add`;
         const method = isUpdating ? 'put' : 'post';
-
+    
         axios({
             method: method,
             url: url,
@@ -75,6 +81,7 @@ const MetaTag = () => {
             toast.error("Error saving the meta tag.", { position: "top-center" });
         });
     };
+    
 
     return (
         <div className="p-6 bg-gray-100">
