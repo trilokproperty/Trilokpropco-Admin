@@ -16,11 +16,13 @@ const AddBlog = () => {
     description: "",
     category: "",
     date: "",
+    metaTitle:"",
+    metaDescription:"",
   });
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-
+  console.log(blogToEdit)
   useEffect(() => {
     const fetchBlogData = async () => {
       if (blogToUpdate?._id) {
@@ -45,6 +47,8 @@ const AddBlog = () => {
         description: blogToEdit.description || "",
         category: selectedCategory || "",
         date: blogToEdit?.date,
+        metaDescription:blogToEdit?.metaDescription || "",
+        metaTitle:blogToEdit?.metaTitle || "",
         _id: blogToEdit._id, // Keep track of the blog ID in formData
         image: blogToEdit.image || "",
       });
@@ -92,6 +96,8 @@ const AddBlog = () => {
     data.append("description", formData.description);
     data.append("date", formData.date);
     data.append("category", formData.category);
+    data.append("metaTitle", formData.metaTitle);
+    data.append("metaDescription", formData.metaDescription);
     if (imageFile) {
       data.append("image", imageFile);
     }
@@ -264,6 +270,37 @@ const AddBlog = () => {
           <DateInput
             isoDateString={formData.date}
             onChange={handleDateChange}
+          />
+        </div>
+
+        {/* for SEO */}
+
+        <hr />
+        <h3>FOR SEO</h3>
+        <hr />
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Meta Title</span>
+          </label>
+          <input
+            type="text"
+            name="metaTitle"
+            value={formData.metaTitle}
+            onChange={handleChange}
+            className="input input-bordered"
+            required
+          />
+        </div>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Meta Description</span>
+          </label>
+          <textarea
+            name="metaDescription"
+            value={formData.metaDescription}
+            onChange={handleChange}
+            className="textarea textarea-bordered"
+            required
           />
         </div>
 

@@ -1162,12 +1162,11 @@ const handleRemoveAmenity = (amenityId) => {
           <label className="label">
             <span className="label-text">Meta Description</span>
           </label>
-          <input
-            type="text"
+          <textarea
             name="metaDescription"
             value={formData.metaDescription}
             onChange={handleChange}
-            className="input input-bordered"
+            className="textarea textarea-bordered"
             required
           />
         </div>
