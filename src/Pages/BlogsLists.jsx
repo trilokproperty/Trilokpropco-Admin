@@ -24,7 +24,7 @@ const BlogsLists = () => {
 
       fetchData();
     }, []);
-  const blogsPerPage = 1; // Adjust as needed
+  const blogsPerPage = 6; // Adjust as needed
   const getVisibleBlogs = () => {
     const startIndex = (currentPage - 1) * blogsPerPage;
     const endIndex = Math.min(startIndex + blogsPerPage, blogs?.length || 0);
