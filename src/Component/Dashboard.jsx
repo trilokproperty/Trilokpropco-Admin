@@ -241,7 +241,7 @@ const Dashboard = () => {
               >
                 <FaMeta />
 
-                <span className="sidebar-text">Footer</span>
+                <span className="sidebar-text">Meta Data</span>
               </Link>
             </li>
             <li>
