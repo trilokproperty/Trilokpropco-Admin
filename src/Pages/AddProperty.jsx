@@ -171,7 +171,7 @@ const AddProperty = () => {
       return newState;
     });
   };
-  const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+  
   const imgbbUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`;
   
   const handleFileChange = async (event) => {
@@ -185,7 +185,7 @@ const AddProperty = () => {
 
         // Push each upload promise to the array
         uploadPromises.push(
-          axios.post(corsProxy + imgbbUrl, formData, {
+          axios.post(imgbbUrl, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -277,7 +277,7 @@ const AddProperty = () => {
 
       // Push each upload promise to the array
       uploadPromises.push(
-        axios.post(corsProxy + imgbbUrl, formData, {
+        axios.post(imgbbUrl, formData, {
           headers: {
               'Content-Type': 'multipart/form-data'
           }
