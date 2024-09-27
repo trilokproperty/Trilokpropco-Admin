@@ -171,7 +171,7 @@ const AddProperty = () => {
       return newState;
     });
   };
-  const proxyUrl = 'https://thingproxy.freeboard.io/fetch/';
+  const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
   const imgbbUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`;
 
   
