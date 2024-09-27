@@ -10,20 +10,33 @@ const Services = () => {
     details: "",
     logo: null,
   });
+
   const [sectionTextFormData, setSectionTextFormData] = useState({
     sectionText: "",
-    serviceTextId: null, // Track ID for updating service text
+    serviceTextId: null,
   });
-  const [loading, setLoading] = useState(false);
 
-  // Fetch all services
+  const [loading, setLoading] = useState(false);
+  
+  // Fetch all services and service texts
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await axios.get(`${endPoint}/service`);
-        setServices(response.data);
+        const [servicesResponse, textsResponse] = await Promise.all([
+          axios.get(`${endPoint}/service`),
+          axios.get(`${endPoint}/service/text`),
+        ]);
+        setServices(servicesResponse.data);
+        
+        if (textsResponse.data.length > 0) {
+          const firstText = textsResponse.data[0];
+          setSectionTextFormData({
+            sectionText: firstText.serviceDes,
+            serviceTextId: firstText._id,
+          });
+        }
       } catch (error) {
-        console.error("Error fetching services:", error);
+        console.error("Error fetching data:", error);
       }
     };
     fetchServices();
@@ -78,7 +91,6 @@ const Services = () => {
 
       // Reset form data
       setServiceFormData({ name: "", details: "", logo: null });
-
     } catch (error) {
       console.error("Error adding service:", error.response?.data, error);
       toast.error(
@@ -101,7 +113,7 @@ const Services = () => {
       if (sectionTextFormData.serviceTextId) {
         // Update existing service text
         const updateResponse = await axios.put(`${endPoint}/service/text/${sectionTextFormData.serviceTextId}`, {
-          sectionText: sectionTextFormData.sectionText,
+          serviceDes: sectionTextFormData.sectionText,
         });
         console.log("Service text updated:", updateResponse.data);
         toast.success("Service text successfully updated!", {
@@ -110,7 +122,7 @@ const Services = () => {
       } else {
         // Add new service text
         const sectionTextResponse = await axios.post(`${endPoint}/service/text`, {
-          sectionText: sectionTextFormData.sectionText,
+          serviceDes: sectionTextFormData.sectionText,
         });
         console.log("Section text submitted:", sectionTextResponse.data);
         toast.success("Service text successfully added!", {
@@ -120,9 +132,8 @@ const Services = () => {
 
       // Reset section text form data
       setSectionTextFormData({ sectionText: "", serviceTextId: null });
-
     } catch (error) {
-      console.error("Error submitting section text:", error.response?.data, error);
+      console.error("Error submitting section text:", error.response?.data);
       toast.error(
         error.response?.data?.message || "Failed to add/update service text. Please try again.",
         {
@@ -156,14 +167,6 @@ const Services = () => {
     }
   };
 
-  // Function to initiate the update of the service text
-  const handleEditText = (service) => {
-    setSectionTextFormData({
-      sectionText: service.sectionText || "", // Populate with existing text
-      serviceTextId: service._id, // Set ID for updating
-    });
-  };
-
   return (
     <div className="flex items-center justify-center flex-col gap-12 mx-1 relative overflow-hidden mb-10">
       <ToastContainer />
@@ -186,7 +189,9 @@ const Services = () => {
       >
         <h2 className="text-lg font-bold">Add New Service</h2>
         <div className="form-control">
-          <label className="label"> <span className="label-text">Service Name</span> </label>
+          <label className="label">
+            <span className="label-text">Service Name</span>
+          </label>
           <input
             type="text"
             name="name"
@@ -197,7 +202,9 @@ const Services = () => {
           />
         </div>
         <div className="form-control">
-          <label className="label"> <span className="label-text">Service Details</span> </label>
+          <label className="label">
+            <span className="label-text">Service Details</span>
+          </label>
           <textarea
             name="details"
             value={serviceFormData.details}
@@ -207,7 +214,9 @@ const Services = () => {
           ></textarea>
         </div>
         <div className="form-control">
-          <label className="label"> <span className="label-text">Logo</span> </label>
+          <label className="label">
+            <span className="label-text">Logo</span>
+          </label>
           <input
             type="file"
             name="logo"
@@ -228,7 +237,9 @@ const Services = () => {
       >
         <h2 className="text-lg font-bold">Add/Update Section Text</h2>
         <div className="form-control">
-          <label className="label"> <span className="label-text">Section Text</span> </label>
+          <label className="label">
+            <span className="label-text">Section Text</span>
+          </label>
           <textarea
             name="sectionText"
             value={sectionTextFormData.sectionText}
@@ -249,31 +260,28 @@ const Services = () => {
           <thead>
             <tr>
               <th>No</th>
-              <th>Service Name</th>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Details</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {services.length ? (
-              services.map((service, index) => (
-                <tr key={service._id}>
-                  <td>{index + 1}</td>
-                  <td>{service.name}</td>
-                  <td>
-                    <button onClick={() => handleEditText(service)} className="btn btn-sm btn-info mr-2">
-                      Edit Text
-                    </button>
-                    <button onClick={() => handleDelete(service._id)} className="btn btn-sm btn-error">
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="3" className="text-center">No services found.</td>
+            {services.map((service, index) => (
+              <tr key={service._id}>
+                <td>{index + 1}</td>
+                <td>
+                  <img src={service.logo} alt={service.name} className="w-16 h-16 object-cover" />
+                </td>
+                <td>{service.name}</td>
+                <td>{service.details}</td>
+                <td>
+                  <button onClick={() => handleDelete(service._id)} className="btn text-white btn-error">
+                    Delete
+                  </button>
+                </td>
               </tr>
-            )}
+            ))}
           </tbody>
         </table>
       </div>
