@@ -171,7 +171,7 @@ const AddProperty = () => {
       return newState;
     });
   };
-  const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+  const proxyUrl = 'https://cors-anywhere-black-seven.vercel.app/';
   const targetUrl  = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`;
 
   
