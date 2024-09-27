@@ -185,7 +185,7 @@ const AddProperty = () => {
 
         // Push each upload promise to the array
         uploadPromises.push(
-          axios.post(`https://thingproxy.freeboard.io/fetch/${imgbbUrl}`, formData, {
+          axios.post(`https://trilokpropco.com/api/proxy${imgbbUrl}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -277,7 +277,7 @@ const AddProperty = () => {
 
       // Push each upload promise to the array
       uploadPromises.push(
-        axios.post(`https://thingproxy.freeboard.io/fetch/${imgbbUrl}`, formData, {
+        axios.post(`https://trilokpropco.com/api/proxy${imgbbUrl}`, formData, {
           headers: {
               'Content-Type': 'multipart/form-data'
           }
@@ -315,7 +315,7 @@ const AddProperty = () => {
     const formData = new FormData();
     formData.append("image", file);
 
-    axios.post(`https://thingproxy.freeboard.io/fetch/${imgbbUrl}`, formData, {
+    axios.post(`https://trilokpropco.com/api/proxy${imgbbUrl}`, formData, {
       headers: {
           'Content-Type': 'multipart/form-data'
       }
