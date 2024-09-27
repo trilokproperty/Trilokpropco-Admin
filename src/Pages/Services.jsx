@@ -5,14 +5,16 @@ import { endPoint } from "../../forAll/forAll";
 
 const Services = () => {
   const [services, setServices] = useState([]);
-  const [formData, setFormData] = useState({
+  const [serviceFormData, setServiceFormData] = useState({
     name: "",
     details: "",
-    sectionText: "",
+    logo: null,
   });
-  const [logoFile, setLogoFile] = useState(null);
+  const [sectionTextFormData, setSectionTextFormData] = useState({
+    sectionText: "",
+    serviceTextId: null, // Track ID for updating service text
+  });
   const [loading, setLoading] = useState(false);
-  const [serviceTextId, setServiceTextId] = useState(null); // Track ID for updating service text
 
   // Fetch all services
   useEffect(() => {
@@ -27,76 +29,108 @@ const Services = () => {
     fetchServices();
   }, []);
 
-  // Handle input changes for form fields
-  const handleChange = (e) => {
+  // Handle input changes for service fields
+  const handleServiceChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setServiceFormData({
+      ...serviceFormData,
+      [name]: value,
+    });
+  };
+
+  // Handle input changes for section text
+  const handleSectionTextChange = (e) => {
+    const { name, value } = e.target;
+    setSectionTextFormData({
+      ...sectionTextFormData,
       [name]: value,
     });
   };
 
   // Handle file upload for logo
   const handleFileChange = (e) => {
-    setLogoFile(e.target.files[0]);
+    setServiceFormData({
+      ...serviceFormData,
+      logo: e.target.files[0],
+    });
   };
 
-  // Handle form submission to add a new service and section text
-  const handleSubmit = async (e) => {
+  // Handle form submission to add a new service
+  const handleServiceSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     const serviceData = new FormData();
-    serviceData.append("name", formData.name);
-    serviceData.append("details", formData.details);
-    serviceData.append("logo", logoFile);
+    serviceData.append("name", serviceFormData.name);
+    serviceData.append("details", serviceFormData.details);
+    serviceData.append("logo", serviceFormData.logo);
 
     try {
-      // If serviceTextId is set, update the existing service text
-      if (serviceTextId) {
-        const updateResponse = await axios.put(`${endPoint}/service/text/${serviceTextId}`, {
-          sectionText: formData.sectionText,
+      const serviceResponse = await axios.post(`${endPoint}/service`, serviceData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setServices([...services, serviceResponse.data]);
+      toast.success("Service successfully added!", {
+        position: "top-center",
+      });
+
+      // Reset form data
+      setServiceFormData({ name: "", details: "", logo: null });
+
+    } catch (error) {
+      console.error("Error adding service:", error.response?.data, error);
+      toast.error(
+        error.response?.data?.message || "Failed to add service. Please try again.",
+        {
+          position: "top-center",
+        }
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle form submission to add or update service text
+  const handleSectionTextSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      if (sectionTextFormData.serviceTextId) {
+        // Update existing service text
+        const updateResponse = await axios.put(`${endPoint}/service/text/${sectionTextFormData.serviceTextId}`, {
+          sectionText: sectionTextFormData.sectionText,
         });
         console.log("Service text updated:", updateResponse.data);
         toast.success("Service text successfully updated!", {
           position: "top-center",
         });
-        setServiceTextId(null); // Reset ID after update
       } else {
-        // Post request to add the service
-        const serviceResponse = await axios.post(`${endPoint}/service`, serviceData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        // Add the new service to the state
-        setServices([...services, serviceResponse.data]);
-        
-        // Now submit the section text
+        // Add new service text
         const sectionTextResponse = await axios.post(`${endPoint}/service/text`, {
-          sectionText: formData.sectionText,
+          sectionText: sectionTextFormData.sectionText,
         });
         console.log("Section text submitted:", sectionTextResponse.data);
+        toast.success("Service text successfully added!", {
+          position: "top-center",
+        });
       }
 
-      setLoading(false);
-      toast.success("Service and section text successfully added!", {
-        position: "top-center",
-      });
-
-      // Reset form data
-      setFormData({ name: "", details: "", sectionText: "" });
-      setLogoFile(null);
+      // Reset section text form data
+      setSectionTextFormData({ sectionText: "", serviceTextId: null });
 
     } catch (error) {
-      console.error("Error submitting form:", error.response?.data, error);
-      setLoading(false);
+      console.error("Error submitting section text:", error.response?.data, error);
       toast.error(
-        error.response?.data?.message || "Failed to add/update service. Please try again.",
+        error.response?.data?.message || "Failed to add/update service text. Please try again.",
         {
           position: "top-center",
         }
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -123,13 +157,11 @@ const Services = () => {
   };
 
   // Function to initiate the update of the service text
-  const handleEdit = (service) => {
-    setFormData({
-      name: service.name,
-      details: service.details,
-      sectionText: service.sectionText || "", // If you have this field
+  const handleEditText = (service) => {
+    setSectionTextFormData({
+      sectionText: service.sectionText || "", // Populate with existing text
+      serviceTextId: service._id, // Set ID for updating
     });
-    setServiceTextId(service._id); // Set ID for updating
   };
 
   return (
@@ -147,18 +179,19 @@ const Services = () => {
         </div>
       )}
 
-      {/* Form to add a new Service and Section Text */}
+      {/* Form to add a new Service */}
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleServiceSubmit}
         className="space-y-4 p-6 lg:w-3/4 w-full bg-white rounded-lg mt-10 mx-1"
       >
+        <h2 className="text-lg font-bold">Add New Service</h2>
         <div className="form-control">
           <label className="label"> <span className="label-text">Service Name</span> </label>
           <input
             type="text"
             name="name"
-            value={formData.name}
-            onChange={handleChange}
+            value={serviceFormData.name}
+            onChange={handleServiceChange}
             className="input input-bordered"
             required
           />
@@ -167,18 +200,8 @@ const Services = () => {
           <label className="label"> <span className="label-text">Service Details</span> </label>
           <textarea
             name="details"
-            value={formData.details}
-            onChange={handleChange}
-            className="textarea textarea-bordered"
-            required
-          ></textarea>
-        </div>
-        <div className="form-control">
-          <label className="label"> <span className="label-text">Section Text</span> </label>
-          <textarea
-            name="sectionText"
-            value={formData.sectionText}
-            onChange={handleChange}
+            value={serviceFormData.details}
+            onChange={handleServiceChange}
             className="textarea textarea-bordered"
             required
           ></textarea>
@@ -194,7 +217,28 @@ const Services = () => {
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          {serviceTextId ? "Update Service Text" : "Add Service and Section Text"}
+          Add Service
+        </button>
+      </form>
+
+      {/* Form to add or update Service Text */}
+      <form
+        onSubmit={handleSectionTextSubmit}
+        className="space-y-4 p-6 lg:w-3/4 w-full bg-white rounded-lg mt-10 mx-1"
+      >
+        <h2 className="text-lg font-bold">Add/Update Section Text</h2>
+        <div className="form-control">
+          <label className="label"> <span className="label-text">Section Text</span> </label>
+          <textarea
+            name="sectionText"
+            value={sectionTextFormData.sectionText}
+            onChange={handleSectionTextChange}
+            className="textarea textarea-bordered"
+            required
+          ></textarea>
+        </div>
+        <button type="submit" className="btn btn-primary">
+          {sectionTextFormData.serviceTextId ? "Update Service Text" : "Add Service Text"}
         </button>
       </form>
 
@@ -214,34 +258,20 @@ const Services = () => {
               services.map((service, index) => (
                 <tr key={service._id}>
                   <td>{index + 1}</td>
+                  <td>{service.name}</td>
                   <td>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle h-12 w-12">
-                          <img src={service.logo} alt={service.name} />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="font-bold">{service.name}</div>
-                        <div className="text-sm opacity-50">{service.details}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <th className="flex gap-2">
-                    <button className="btn btn-info btn-xs" onClick={() => handleEdit(service)}>
+                    <button onClick={() => handleEditText(service)} className="btn btn-sm btn-info mr-2">
                       Edit Text
                     </button>
-                    <button className="btn btn-error btn-xs text-white" onClick={() => handleDelete(service._id)}>
+                    <button onClick={() => handleDelete(service._id)} className="btn btn-sm btn-error">
                       Delete
                     </button>
-                  </th>
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="3" className="p-5 text-center">
-                  No services available.
-                </td>
+                <td colSpan="3" className="text-center">No services found.</td>
               </tr>
             )}
           </tbody>
