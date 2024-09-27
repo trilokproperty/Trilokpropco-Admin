@@ -101,18 +101,19 @@ const AddBlog = () => {
     if (imageFile) {
       data.append("image", imageFile);
     }
-
+  
     try {
-      console.log(formData, data);
+      console.log("Form Data:", formData);
+      console.log("Form Data to Send:", data);
       const response = blogToEdit
         ? await axios.put(`${endPoint}/blog/${blogToEdit._id}`, data, {
-            "Content-type": "multipart/form-data",
+            headers: { "Content-Type": "multipart/form-data" },
           })
         : await axios.post(`${endPoint}/blog`, data, {
-            "Content-type": "multipart/form-data",
+            headers: { "Content-Type": "multipart/form-data" },
           });
-      console.log(response.data);
-
+      console.log("Response Data:", response.data);
+  
       if (response.status === 200) {
         toast.success(
           `Blog ${blogToEdit ? "updated" : "added"} successfully!`,
@@ -120,20 +121,20 @@ const AddBlog = () => {
             position: "top-center",
           }
         );
-        setLoading(false);
-        // Optionally, you can reset the form or redirect the user here
       }
     } catch (error) {
-      console.error("Error submitting form:", error.response.data, error);
-      setLoading(false);
+      console.error("Error submitting form:", error.response?.data || error);
       toast.error(
-        error.response.data.message || "Failed to add blog. Please try again.",
+        error.response?.data?.message || "Failed to add blog. Please try again.",
         {
           position: "top-center",
         }
       );
+    } finally {
+      setLoading(false);
     }
   };
+  
 
   AddBlog.modules = {
     toolbar: [
@@ -288,7 +289,6 @@ const AddBlog = () => {
             value={formData.metaTitle}
             onChange={handleChange}
             className="input input-bordered"
-            required
           />
         </div>
         <div className="form-control">
@@ -300,7 +300,6 @@ const AddBlog = () => {
             value={formData.metaDescription}
             onChange={handleChange}
             className="textarea textarea-bordered"
-            required
           />
         </div>
 

@@ -1,1 +1,1 @@
-export const endPoint="https://trilokpropco.com/api"
+export const endPoint="http://localhost:5000/api"
