@@ -175,10 +175,9 @@ const AddProperty = () => {
 const proxyUrl = 'https://cors-anywhere-black-seven.vercel.app/';
 const targetUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`;
 
-// Avoid unintended changes during concatenation
-const completeUrl = `${proxyUrl}${targetUrl}`;
-
-// Ensure the URL has two slashes after 'https:'
+// Combine URLs correctly
+const completeUrl = proxyUrl + targetUrl.replace(/^https?:\/\//, ''); 
+// Avoid double slashing issues
 console.log(completeUrl); // Should print correctly formatted URL
 
 
