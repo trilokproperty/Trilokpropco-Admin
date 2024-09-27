@@ -171,8 +171,9 @@ const AddProperty = () => {
       return newState;
     });
   };
-  
+  const proxyUrl = 'https://trilokpropco.com/proxy/';
   const imgbbUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`;
+
   
   const handleFileChange = async (event) => {
     const files = event.target.files;
@@ -185,7 +186,7 @@ const AddProperty = () => {
 
         // Push each upload promise to the array
         uploadPromises.push(
-          axios.post(`https://trilokpropco.com/api/proxy${imgbbUrl}`, formData, {
+          axios.post(`${proxyUrl}${encodeURIComponent(imgbbUrl)}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -277,7 +278,7 @@ const AddProperty = () => {
 
       // Push each upload promise to the array
       uploadPromises.push(
-        axios.post(`https://trilokpropco.com/api/proxy${imgbbUrl}`, formData, {
+        axios.post(`${proxyUrl}${encodeURIComponent(imgbbUrl)}`, formData, {
           headers: {
               'Content-Type': 'multipart/form-data'
           }
@@ -315,7 +316,7 @@ const AddProperty = () => {
     const formData = new FormData();
     formData.append("image", file);
 
-    axios.post(`https://trilokpropco.com/api/proxy${imgbbUrl}`, formData, {
+    axios.post(`${proxyUrl}${encodeURIComponent(imgbbUrl)}`, formData, {
       headers: {
           'Content-Type': 'multipart/form-data'
       }
