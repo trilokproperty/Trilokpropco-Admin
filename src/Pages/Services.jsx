@@ -12,6 +12,7 @@ const Services = () => {
   });
   const [logoFile, setLogoFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [serviceTextId, setServiceTextId] = useState(null); // Track ID for updating service text
 
   // Fetch all services
   useEffect(() => {
@@ -44,44 +45,54 @@ const Services = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     const serviceData = new FormData();
     serviceData.append("name", formData.name);
     serviceData.append("details", formData.details);
     serviceData.append("logo", logoFile);
 
     try {
-      // Post request to add the service
-      const serviceResponse = await axios.post(`${endPoint}/service`, serviceData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      // Add the new service to the state
-      setServices([...services, serviceResponse.data]);
+      // If serviceTextId is set, update the existing service text
+      if (serviceTextId) {
+        const updateResponse = await axios.put(`${endPoint}/service/text/${serviceTextId}`, {
+          sectionText: formData.sectionText,
+        });
+        console.log("Service text updated:", updateResponse.data);
+        toast.success("Service text successfully updated!", {
+          position: "top-center",
+        });
+        setServiceTextId(null); // Reset ID after update
+      } else {
+        // Post request to add the service
+        const serviceResponse = await axios.post(`${endPoint}/service`, serviceData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        // Add the new service to the state
+        setServices([...services, serviceResponse.data]);
+        
+        // Now submit the section text
+        const sectionTextResponse = await axios.post(`${endPoint}/service/text`, {
+          sectionText: formData.sectionText,
+        });
+        console.log("Section text submitted:", sectionTextResponse.data);
+      }
 
-      // Now submit the section text
-      const sectionTextResponse = await axios.post(`${endPoint}/service/text`, {
-        sectionText: formData.sectionText,
-      });
-
-      // Log or use the response from section text submission if needed
-      console.log("Section text submitted:", sectionTextResponse.data);
-      
       setLoading(false);
       toast.success("Service and section text successfully added!", {
         position: "top-center",
       });
-      
+
       // Reset form data
       setFormData({ name: "", details: "", sectionText: "" });
       setLogoFile(null);
-      
+
     } catch (error) {
       console.error("Error submitting form:", error.response?.data, error);
       setLoading(false);
       toast.error(
-        error.response?.data?.message || "Failed to add service. Please try again.",
+        error.response?.data?.message || "Failed to add/update service. Please try again.",
         {
           position: "top-center",
         }
@@ -109,6 +120,16 @@ const Services = () => {
         }
       );
     }
+  };
+
+  // Function to initiate the update of the service text
+  const handleEdit = (service) => {
+    setFormData({
+      name: service.name,
+      details: service.details,
+      sectionText: service.sectionText || "", // If you have this field
+    });
+    setServiceTextId(service._id); // Set ID for updating
   };
 
   return (
@@ -173,7 +194,7 @@ const Services = () => {
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          Add Service and Section Text
+          {serviceTextId ? "Update Service Text" : "Add Service and Section Text"}
         </button>
       </form>
 
@@ -207,6 +228,9 @@ const Services = () => {
                     </div>
                   </td>
                   <th className="flex gap-2">
+                    <button className="btn btn-info btn-xs" onClick={() => handleEdit(service)}>
+                      Edit Text
+                    </button>
                     <button className="btn btn-error btn-xs text-white" onClick={() => handleDelete(service._id)}>
                       Delete
                     </button>
