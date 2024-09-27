@@ -172,7 +172,10 @@ const AddProperty = () => {
     });
   };
   const proxyUrl = 'https://cors-anywhere-black-seven.vercel.app/';
-  const targetUrl  = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`;
+const targetUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`;
+
+// Combine URLs
+const completeUrl = `${proxyUrl}${targetUrl}`;
 
   
   const handleFileChange = async (event) => {
@@ -186,9 +189,10 @@ const AddProperty = () => {
 
         // Push each upload promise to the array
         uploadPromises.push(
-          axios.post(proxyUrl + targetUrl, formData, {
+          axios.post(completeUrl, formData, {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
+                'x-requested-with': 'XMLHttpRequest', 
             }
         })
         );
@@ -224,7 +228,7 @@ const AddProperty = () => {
     console.log(id, imageUrl)
     setLoading(true);
     try {
-      const response = await axios.delete(`http://localhost:5000/property/${id}/galleryImage`, {
+      const response = await axios.delete(`${endPoint}/property/${id}/galleryImage`, {
         params: { imageUrl },
       });
        // Check if image was successfully deleted
@@ -247,7 +251,7 @@ const AddProperty = () => {
     console.log(id, imageUrl)
     setLoading(true);
     try {
-      const response = await axios.delete(`http://localhost:5000/property/${id}/bankImage`, {
+      const response = await axios.delete(`${endPoint}/property/${id}/bankImage`, {
         params: { imageUrl },
       });
        // Check if image was successfully deleted
@@ -278,9 +282,10 @@ const AddProperty = () => {
 
       // Push each upload promise to the array
       uploadPromises.push(
-        axios.post(proxyUrl + targetUrl, formData, {
+        axios.post(completeUrl, formData, {
           headers: {
-              'Content-Type': 'multipart/form-data'
+              'Content-Type': 'multipart/form-data',
+              'x-requested-with': 'XMLHttpRequest', 
           }
       })
       );
@@ -316,9 +321,10 @@ const AddProperty = () => {
     const formData = new FormData();
     formData.append("image", file);
 
-    axios.post(proxyUrl + targetUrl, formData, {
+    axios.post(completeUrl, formData, {
       headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          'x-requested-with': 'XMLHttpRequest', 
       }
   })
       .then((response) => {
