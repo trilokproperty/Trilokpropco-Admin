@@ -15,6 +15,7 @@ const Footer = () => {
         twitter: '',
         email: '',
         contact: '',
+        regis: '',
         location: ''
     });
     const [isUpdating, setIsUpdating] = useState(false);
@@ -114,7 +115,7 @@ const Footer = () => {
                     />
                 </div>
                 
-                {['facebook', 'instagram', 'youtube', 'linkedin', 'whatsapp', 'twitter', 'email', 'contact', 'location'].map((field) => (
+                {['facebook', 'instagram', 'youtube', 'linkedin', 'whatsapp', 'twitter', 'email', 'contact', 'location', 'regis'].map((field) => (
                     <div key={field} className="form-control">
                         <label className="label">
                             <span className="label-text capitalize">{field}</span>
