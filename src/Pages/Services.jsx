@@ -8,6 +8,7 @@ const Services = () => {
   const [formData, setFormData] = useState({
     name: "",
     details: "",
+    sectionText: "",
   });
   const [logoFile, setLogoFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -39,28 +40,45 @@ const Services = () => {
     setLogoFile(e.target.files[0]);
   };
 
-  // Handle form submission to add a new service
+  // Handle form submission to add a new service and section text
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const data = new FormData();
-    data.append("name", formData.name);
-    data.append("details", formData.details);
-    data.append("logo", logoFile);
+    
+    const serviceData = new FormData();
+    serviceData.append("name", formData.name);
+    serviceData.append("details", formData.details);
+    serviceData.append("logo", logoFile);
 
     try {
-      const response = await axios.post(`${endPoint}/service`, data, {
+      // Post request to add the service
+      const serviceResponse = await axios.post(`${endPoint}/service`, serviceData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      setServices([...services, response.data]);
+      // Add the new service to the state
+      setServices([...services, serviceResponse.data]);
+
+      // Now submit the section text
+      const sectionTextResponse = await axios.post(`${endPoint}/service/text`, {
+        sectionText: formData.sectionText,
+      });
+
+      // Log or use the response from section text submission if needed
+      console.log("Section text submitted:", sectionTextResponse.data);
+      
       setLoading(false);
-      toast.success("Service successfully added!", {
+      toast.success("Service and section text successfully added!", {
         position: "top-center",
       });
+      
+      // Reset form data
+      setFormData({ name: "", details: "", sectionText: "" });
+      setLogoFile(null);
+      
     } catch (error) {
-      console.error("Error submitting form:", error.response.data, error);
+      console.error("Error submitting form:", error.response?.data, error);
       setLoading(false);
       toast.error(
         error.response?.data?.message || "Failed to add service. Please try again.",
@@ -83,7 +101,7 @@ const Services = () => {
         position: "top-center",
       });
     } catch (error) {
-      console.error("Error deleting service:", error.response?.data, error);
+      console.error("Error deleting service:", error.response?.data);
       toast.error(
         error.response?.data?.message || "Failed to delete service. Please try again.",
         {
@@ -108,7 +126,7 @@ const Services = () => {
         </div>
       )}
 
-      {/* Form to add a new Service */}
+      {/* Form to add a new Service and Section Text */}
       <form
         onSubmit={handleSubmit}
         className="space-y-4 p-6 lg:w-3/4 w-full bg-white rounded-lg mt-10 mx-1"
@@ -135,6 +153,16 @@ const Services = () => {
           ></textarea>
         </div>
         <div className="form-control">
+          <label className="label"> <span className="label-text">Section Text</span> </label>
+          <textarea
+            name="sectionText"
+            value={formData.sectionText}
+            onChange={handleChange}
+            className="textarea textarea-bordered"
+            required
+          ></textarea>
+        </div>
+        <div className="form-control">
           <label className="label"> <span className="label-text">Logo</span> </label>
           <input
             type="file"
@@ -145,7 +173,7 @@ const Services = () => {
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          Add Service
+          Add Service and Section Text
         </button>
       </form>
 
