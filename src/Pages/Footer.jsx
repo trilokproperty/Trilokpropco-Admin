@@ -40,6 +40,7 @@ const Footer = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        console.log(`Changing field: ${name} to value: ${value}`); // Debug log
         setFooterData({
             ...footerData,
             [name]: value
