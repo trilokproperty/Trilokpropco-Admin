@@ -59,7 +59,7 @@ const Footer = () => {
         
         const formData = new FormData();
         Object.keys(footerData).forEach(key => {
-            console.log(`Appending to formData: ${key} = ${footerData[key]}`); // Debug log
+            console.log(`Appending formData: ${key} = ${footerData[key]}`); // Debug log
             formData.append(key, footerData[key]);
         });
 
