@@ -172,13 +172,13 @@ const AddProperty = () => {
     });
   };
   // Correctly concatenate proxy and target URLs
-const proxyUrl = 'https://cors-anywhere-black-seven.vercel.app/';
+const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 const targetUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`;
 
-// Combine URLs correctly
-const completeUrl = proxyUrl + targetUrl.replace(/^https?:\/\//, ''); 
-// Avoid double slashing issues
-console.log(completeUrl); // Should print correctly formatted URL
+// Construct the full URL by concatenating correctly
+const completeUrl = proxyUrl + targetUrl; // Ensure proper double slashes remain
+
+console.log('Requesting:', completeUrl); // Check the constructed URL
 
 
   
@@ -196,6 +196,7 @@ console.log(completeUrl); // Should print correctly formatted URL
           axios.post(completeUrl, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
+                'Origin': 'admin.trilokpropco.com',
                 'x-requested-with': 'XMLHttpRequest', 
             }
         })
@@ -289,6 +290,7 @@ console.log(completeUrl); // Should print correctly formatted URL
         axios.post(completeUrl, formData, {
           headers: {
               'Content-Type': 'multipart/form-data',
+              'Origin': 'admin.trilokpropco.com',
               'x-requested-with': 'XMLHttpRequest', 
           }
       })
@@ -328,6 +330,7 @@ console.log(completeUrl); // Should print correctly formatted URL
     axios.post(completeUrl, formData, {
       headers: {
           'Content-Type': 'multipart/form-data',
+          'Origin': 'admin.trilokpropco.com',
           'x-requested-with': 'XMLHttpRequest', 
       }
   })
