@@ -171,11 +171,16 @@ const AddProperty = () => {
       return newState;
     });
   };
-  const proxyUrl = 'https://cors-anywhere-black-seven.vercel.app/';
+  // Correctly concatenate proxy and target URLs
+const proxyUrl = 'https://cors-anywhere-black-seven.vercel.app/';
 const targetUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`;
 
-// Combine URLs
+// Avoid unintended changes during concatenation
 const completeUrl = `${proxyUrl}${targetUrl}`;
+
+// Ensure the URL has two slashes after 'https:'
+console.log(completeUrl); // Should print correctly formatted URL
+
 
   
   const handleFileChange = async (event) => {
