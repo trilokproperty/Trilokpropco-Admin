@@ -186,7 +186,7 @@ const AddProperty = () => {
 
         // Push each upload promise to the array
         uploadPromises.push(
-          axios.post(`${proxyUrl}${encodeURIComponent(imgbbUrl)}`, formData, {
+          axios.post(`${proxyUrl}${imgbbUrl}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
