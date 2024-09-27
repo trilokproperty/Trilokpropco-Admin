@@ -78,6 +78,7 @@ const AddBlog = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Changing field: ${name} to value: ${value}`); // Debug log
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
@@ -98,6 +99,7 @@ const AddBlog = () => {
     data.append("category", formData.category);
     data.append("metaTitle", formData.metaTitle);
     data.append("metaDescription", formData.metaDescription);
+    console.log(`Appending formData: ${data} = ${formData}`);
     if (imageFile) {
       data.append("image", imageFile);
     }
