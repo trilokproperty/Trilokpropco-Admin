@@ -17,7 +17,7 @@ const Properties = () => {
   const propertiesPerPage = 12;
 
   const truncateText = (str, numWords) => {
-    const words = str.split(" ");
+    const words = str?.split(" ");
     if (words.length > numWords) {
       return words.slice(0, numWords).join(" ") + "...";
     }
