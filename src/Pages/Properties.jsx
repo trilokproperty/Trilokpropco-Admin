@@ -26,7 +26,7 @@ const Properties = () => {
 
   const stripHtmlTags = (str) => {
     if (str === null || str === "") return "";
-    return str.replace(/<[^>]*>/g, "");
+    return str?.replace(/<[^>]*>/g, "");
   };
 
   useEffect(() => {
