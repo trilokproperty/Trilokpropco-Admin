@@ -18,7 +18,7 @@ const Properties = () => {
 
   const truncateText = (str, numWords) => {
     const words = str?.split(" ");
-    if (words.length > numWords) {
+    if (words?.length > numWords) {
       return words.slice(0, numWords).join(" ") + "...";
     }
     return str;
@@ -59,12 +59,12 @@ const Properties = () => {
 
   const getVisibleProperties = () => {
     const startIndex = (currentPage - 1) * propertiesPerPage;
-    const endIndex = Math.min(startIndex + propertiesPerPage, properties.length);
+    const endIndex = Math.min(startIndex + propertiesPerPage, properties?.length);
     return properties.slice(startIndex, endIndex);
   };
 
   const handlePageChange = (pageNumber) => {
-    if (pageNumber <= 0 || pageNumber > Math.ceil(properties.length / propertiesPerPage)) {
+    if (pageNumber <= 0 || pageNumber > Math.ceil(properties?.length / propertiesPerPage)) {
       return;
     }
     setCurrentPage(pageNumber);
@@ -154,7 +154,7 @@ const Properties = () => {
                 </th>
               </tr>
             ))}
-            {properties.length === 0 && (
+            {properties?.length === 0 && (
               <p className="p-5">No Property is available.</p>
             )}
           </tbody>
@@ -162,7 +162,7 @@ const Properties = () => {
       </div>
 
       {/* Pagination */}
-      {properties.length > propertiesPerPage && (
+      {properties?.length > propertiesPerPage && (
         <div className="join mt-5 flex items-center justify-center my-10">
           <button
             className="join-item btn disabled:opacity-50"
@@ -175,7 +175,7 @@ const Properties = () => {
           <button
             className="join-item btn disabled:opacity-50"
             onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === Math.ceil(properties.length / propertiesPerPage)}
+            disabled={currentPage === Math.ceil(properties?.length / propertiesPerPage)}
           >
             »
           </button>
