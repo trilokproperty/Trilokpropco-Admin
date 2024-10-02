@@ -37,23 +37,20 @@ const Partners = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+        const formData = new FormData();
+        formData.append('name', newPartner.name); // Append name
+    
+        // Append images to FormData
+        [...imageFiles].forEach(file => {
+            formData.append('images', file); // Change to 'images'
+        });
+    
         try {
-            const uploadedImages = await Promise.all([...imageFiles].map(async (file) => {
-                const formData = new FormData();
-                formData.append('image', file);
-                const response = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`, formData);
-                return {
-                    url: response.data.data.display_url,
-                    deleteUrl: response.data.data.delete_url,
-                };
-            }));
-
-            const newPartnerData = {
-                ...newPartner,
-                images: uploadedImages,
-            };
-
-            const response = await axios.post(`${endPoint}/partner`, newPartnerData);
+            const response = await axios.post(`${endPoint}/partner`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
             setPartners([...partners, response.data]);
             setNewPartner({ name: '', images: [] });
             setImageFiles([]);
