@@ -326,6 +326,7 @@ submissionData.append("category", formData.category || "");
 submissionData.append("description", formData.description || "");
 submissionData.append("nearbyFacilities", formData.nearbyFacilities || "");
 submissionData.append("locationMap", formData.locationMap || "");
+submissionData.append("pdfDownload", formData.pdfDownload || "");
 submissionData.append("specifications", formData.specifications || "");
 submissionData.append("for", formData.for || "");
 submissionData.append("created_at", formData.created_at || "");
@@ -902,7 +903,7 @@ const handleRemoveAmenity = (amenityId) => {
         {/* Nested Fields for Plans */}
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Plans</span>
+            <span className="label-text">Plans (To update plans delete previous one and add new plan/plans)</span>
           </label>
           {formData.plans.map((plan, index) => (
             <div
