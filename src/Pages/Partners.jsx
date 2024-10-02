@@ -139,14 +139,15 @@ const Partners = () => {
                     <div key={partner._id} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                         <h2 className="text-xl font-bold mb-2">{partner.name}</h2>
                         <div className="flex flex-wrap gap-2">
-                            {partner.images && partner.images.length > 0 && (
-                                <img 
-                                    src={partner.images[0].url} // Display only the first image
-                                    alt={partner.name} 
-                                    className="w-24 h-24 object-cover rounded" 
-                                />
-                            )}
-                        </div>
+    {partner.image && (
+        <img 
+            src={partner.image} // Use partner.image here
+            alt={partner.name} 
+            className="w-24 h-24 object-cover rounded" 
+        />
+    )}
+</div>
+
                         <button 
                             onClick={() => deletePartner(partner._id)} 
                             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
