@@ -28,7 +28,6 @@ const AddProperty = () => {
 
     fetchPropertyData();
 }, [propertyToUpdate]);
-  console.log(propertyToEdit)
   const [formData, setFormData] = useState({
     name: "",
     metaTitle: "",
@@ -82,7 +81,6 @@ const AddProperty = () => {
     exclusive:false
   });
 
-  console.log(formData)
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [selectedType, setSelectedType] = useState(null);
   const [selectedDeveloper, setSelectedDeveloper] = useState(null);
@@ -100,7 +98,6 @@ const AddProperty = () => {
 
       if (propertyToEdit?.amenities && amenitiesData?.length) {
         const selectedAmenities = amenitiesData.filter(item => propertyToEdit.amenities.includes(item._id));
-        console.log("Selected Amenities:", selectedAmenities);
         setSelectedAmenities(selectedAmenities);
       }
 
@@ -117,7 +114,6 @@ const AddProperty = () => {
       setSelectedLocation(location);
     }
   }, [propertyToEdit, typeData, developerData, statusData, cityData, amenitiesData]);
-
 
 
   useEffect(() => {
@@ -149,7 +145,6 @@ const AddProperty = () => {
     fetchData();
   }, [endPoint]);
   
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -158,7 +153,6 @@ const AddProperty = () => {
     });
   };
   
-
   const handleNestedChange = (e, path) => {
     const { name, value } = e.target;
     setFormData((prevState) => {
@@ -174,7 +168,6 @@ const AddProperty = () => {
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
-    console.log("getting files:", files)
     setFormData((prevState) => ({
       ...prevState,
       galleryImages: [...prevState.galleryImages, ...files],
@@ -183,18 +176,15 @@ const AddProperty = () => {
   
   const handleFileChangeBank = (event) => {
     const files = Array.from(event.target.files);
-    console.log("getting files Bank:", files)
 
     setFormData((prevState) => ({
       ...prevState,
       bankImages: [...prevState.bankImages, ...files],
     }));
   };
-  console.log(formData?.galleryImages, formData?.bankImages,)
+
   const handlePlanFileChange = (e, index) => {
     const file = e.target.files[0];
-    console.log("getting file:", file)
-
     setFormData((prevState) => {
       const updatedPlans = [...prevState.plans];
       updatedPlans[index].image = file; // Store the image file for the specific plan
@@ -205,10 +195,7 @@ const AddProperty = () => {
     });
   };
   
-
-
   const handleGalleryImageDelete = async (id, imageUrl) => {
-    console.log(id, imageUrl)
     setLoading(true);
     try {
       const response = await axios.delete(`${endPoint}/property/${id}/galleryImage`, {
@@ -231,7 +218,6 @@ const AddProperty = () => {
   };
 
   const handleBankImageDelete = async (id, imageUrl) => {
-    console.log(id, imageUrl)
     setLoading(true);
     try {
       const response = await axios.delete(`${endPoint}/property/${id}/bankImage`, {
@@ -274,15 +260,58 @@ const AddProperty = () => {
     }));
   };
 
-  const handleRemovePlan = (index) => {
-    setFormData((prevState) => {
-      const newPlans = prevState.plans.filter((_, i) => i !== index);
-      return {
+  const handleRemovePlan = async (index) => {
+    if (!formData.plans || index >= formData.plans.length) {
+        console.error("Invalid index or no plans to remove");
+        return;
+    }
+
+    // Update local state first
+    const planIdToRemove = formData.plans[index]._id; // Get the ID of the plan to remove
+    const newPlans = formData.plans.filter((_, i) => i !== index);
+    setFormData((prevState) => ({
         ...prevState,
         plans: newPlans,
-      };
-    });
-  };
+    }));
+
+    // Call API to update backend after plan is removed
+    try {
+        const token = localStorage.getItem('token'); // Adjust this to your token retrieval method
+        const response = await fetch(`${endPoint}/property/${propertyToEdit._id}/plans`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`, // Include the token in the headers
+            },
+            body: JSON.stringify({
+                planIds: [planIdToRemove], // Include the plan ID to delete
+            }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error(`Error ${response.status}:`, errorData.message);
+            throw new Error('Failed to delete the plan from the server');
+        }
+
+        const updatedProperty = await response.json();
+        console.log('Updated property after plan removal:', updatedProperty);
+
+        // Optional: Provide user feedback (e.g., toast notification)
+        alert('Plan deleted successfully!');
+        
+        // Optionally, you could re-fetch the property data here if needed
+    } catch (error) {
+        console.error('Error deleting the plan:', error);
+        // Optionally: Display an error message to the user
+        alert('An error occurred while deleting the plan. Please try again.');
+    }
+};
+
+
+
+  
+
 
   const handleRemovePriceDetail = (index) => {
     setFormData((prevState) => {
@@ -298,10 +327,8 @@ const AddProperty = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Selected Type:", selectedType);
-    console.log("Selected Developer:", selectedDeveloper);
-    console.log("Selected Location:", selectedLocation);
-    console.log("Selected Status:", selectedStatus);
+     // Check if formData has updated plans
+  console.log("Final formData before submitting to backend:", formData);
     
     if (loading) return;
   
@@ -357,7 +384,6 @@ if (Array.isArray(formData.bankImages)) {
    // Append plans data
 if (Array.isArray(formData.plans) && formData.plans.length > 0) {
   formData.plans.forEach((plan, index) => {
-      console.log(`Appending Plan ${index}:`, plan);
 
       // Append non-file fields as individual fields
       submissionData.append(`plans[${index}][planType]`, plan.planType || "");
@@ -386,7 +412,6 @@ submissionData.append("priceDetails", JSON.stringify(formData.priceDetails));
             headers: { 'Content-Type': 'multipart/form-data' },
         });
   
-      console.log(response);
       toast.success('Property submitted successfully!');
       // Handle success actions
     } catch (error) {
@@ -396,9 +421,6 @@ submissionData.append("priceDetails", JSON.stringify(formData.priceDetails));
       setLoading(false);
     }
 };
-
-
-  
   
   const handleAmenitySelect = (amenity) => {
   if (!selectedAmenities.find((a) => a._id === amenity._id)) {
