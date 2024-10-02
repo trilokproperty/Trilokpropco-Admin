@@ -48,6 +48,7 @@ const Partners = () => {
         if (newPartner.image) {
             formData.append('image', newPartner.image); // Change to 'image'
         }
+        console.log(formData)
 
         try {
             const response = await axios.post(`${endPoint}/partner`, formData, {
