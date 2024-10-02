@@ -6,9 +6,9 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Partners = () => {
     const [partners, setPartners] = useState([]);
-    const [newPartner, setNewPartner] = useState({ name: '', images: [] });
-    const [imageFiles, setImageFiles] = useState([]);
+    const [newPartner, setNewPartner] = useState({ name: '', image: null }); // Change to a single image
     const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         fetchPartners();
     }, []);
@@ -23,7 +23,11 @@ const Partners = () => {
     };
 
     const handleImageChange = (e) => {
-        setImageFiles(e.target.files);
+        // Only set the first selected file
+        setNewPartner(prevState => ({
+            ...prevState,
+            image: e.target.files[0] // Change to single image
+        }));
     };
 
     const handleInputChange = (e) => {
@@ -39,12 +43,12 @@ const Partners = () => {
         setLoading(true);
         const formData = new FormData();
         formData.append('name', newPartner.name); // Append name
-    
-        // Append images to FormData
-        [...imageFiles].forEach(file => {
-            formData.append('images', file); // Change to 'images'
-        });
-    
+        
+        // Append the single image to FormData
+        if (newPartner.image) {
+            formData.append('image', newPartner.image); // Change to 'image'
+        }
+
         try {
             const response = await axios.post(`${endPoint}/partner`, formData, {
                 headers: {
@@ -52,8 +56,7 @@ const Partners = () => {
                 }
             });
             setPartners([...partners, response.data]);
-            setNewPartner({ name: '', images: [] });
-            setImageFiles([]);
+            setNewPartner({ name: '', image: null }); // Reset to empty values
             setLoading(false);
             toast.success("Partner successfully added!", { position: "top-center" });
         } catch (error) {
@@ -65,7 +68,7 @@ const Partners = () => {
 
     const deletePartner = async (id) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this Partner?");
-    if (!confirmDelete) return;
+        if (!confirmDelete) return;
         try {
             setLoading(true);
             // Delete partner from database
@@ -76,7 +79,7 @@ const Partners = () => {
         } catch (error) {
             setLoading(false);
             console.error('Error deleting partner:', error);
-            toast.error("Failed to deleting partner. Please try again.", { position: "top-center" });
+            toast.error("Failed to delete partner. Please try again.", { position: "top-center" });
         }
     };
 
@@ -109,13 +112,12 @@ const Partners = () => {
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="images">
-                        Upload Images
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
+                        Upload Image
                     </label>
                     <input 
                         type="file" 
-                        multiple 
-                        onChange={handleImageChange} 
+                        onChange={handleImageChange} // Changed to only one image
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                         required 
                     />
@@ -135,14 +137,13 @@ const Partners = () => {
                     <div key={partner._id} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                         <h2 className="text-xl font-bold mb-2">{partner.name}</h2>
                         <div className="flex flex-wrap gap-2">
-                            {partner.images.map((image, index) => (
+                            {partner.images && partner.images.length > 0 && (
                                 <img 
-                                    key={index} 
-                                    src={image.url} 
+                                    src={partner.images[0].url} // Display only the first image
                                     alt={partner.name} 
                                     className="w-24 h-24 object-cover rounded" 
                                 />
-                            ))}
+                            )}
                         </div>
                         <button 
                             onClick={() => deletePartner(partner._id)} 
