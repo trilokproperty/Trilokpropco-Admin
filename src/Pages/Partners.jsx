@@ -9,6 +9,7 @@ const Partners = () => {
     const [newPartner, setNewPartner] = useState({ name: '', image: null }); // Change to a single image
     const [loading, setLoading] = useState(false);
 
+    console.log(newPartner, partners)
     useEffect(() => {
         fetchPartners();
     }, []);
