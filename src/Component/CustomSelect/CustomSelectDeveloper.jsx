@@ -18,7 +18,7 @@ export const CustomSelectDeveloper = ({ options, selectedValue, onSelect }) => {
   const filteredOptions = options?.filter((option) => option?._id == selectedValue);
   console.log(filteredOptions[0]?.name)
   return (
-    <div className="relative">
+    <div className="relative z-10">
       <button
         onClick={toggleDropdown}
         type='button'
