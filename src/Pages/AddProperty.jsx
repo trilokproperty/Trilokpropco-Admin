@@ -621,7 +621,7 @@ const handleRemoveAmenity = (amenityId) => {
 
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Developer</span>
+            <span className="label-text z-20">Developer</span>
           </label>
           <CustomSelectDeveloper
             options={developerData}
