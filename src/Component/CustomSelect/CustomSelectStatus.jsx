@@ -49,7 +49,7 @@ export const CustomSelectStatus = ({ options, selectedValue, onSelect }) => {
         </svg>
       </button>
       {open && (
-        <div className="absolute mt-1 w-full rounded-md bg-white shadow-lg">
+        <div className="relative mt-1 w-full rounded-md bg-white shadow-lg">
           <ul
             tabIndex="-1"
             role="listbox"
