@@ -18,7 +18,7 @@ export const CustomSelectDeveloper = ({ options, selectedValue, onSelect }) => {
   const filteredOptions = options?.filter((option) => option?._id == selectedValue);
   console.log(filteredOptions[0]?.name)
   return (
-    <div className="relative z-10">
+    <div className="relative">
       <button
         onClick={toggleDropdown}
         type='button'
@@ -49,7 +49,7 @@ export const CustomSelectDeveloper = ({ options, selectedValue, onSelect }) => {
         </svg>
       </button>
       {open && (
-        <div className="absolute mt-1 w-full rounded-md bg-white shadow-lg">
+        <div className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg">
           <ul
             tabIndex="-1"
             role="listbox"
