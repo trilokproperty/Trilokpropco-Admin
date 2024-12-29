@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-export const CustomSelectDeveloper = ({ options = [], selectedValue, onSelect }) => {
+export const CustomSelectDeveloper = ({ options = [], selectedValue, onSelect, isLoading = false }) => {
   const [open, setOpen] = useState(false);
 
   const toggleDropdown = () => setOpen((prev) => !prev);
@@ -22,9 +22,12 @@ export const CustomSelectDeveloper = ({ options = [], selectedValue, onSelect })
         className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm leading-5 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue"
         aria-haspopup="listbox"
         aria-expanded={open}
+        disabled={isLoading}
       >
         <div className="flex items-center">
-          {filteredOptions.length > 0 ? (
+          {isLoading ? (
+            <span className="text-gray-400">Loading...</span>
+          ) : filteredOptions.length > 0 ? (
             <>
               <img
                 src={filteredOptions[0]?.image}
@@ -54,7 +57,9 @@ export const CustomSelectDeveloper = ({ options = [], selectedValue, onSelect })
       {/* Dropdown list */}
       {open && (
         <div className="relative z-10 mt-1 w-full rounded-md bg-white shadow-lg">
-          {options.length > 0 ? (
+          {isLoading ? (
+            <div className="py-2 px-4 text-gray-500">Loading options...</div>
+          ) : options.length > 0 ? (
             <ul
               tabIndex="-1"
               role="listbox"
