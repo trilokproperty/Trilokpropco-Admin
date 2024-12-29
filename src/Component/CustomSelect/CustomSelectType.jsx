@@ -8,14 +8,14 @@ export const CustomSelectType = ({ options, selectedValue, onSelect }) => {
   };
 
   const handleSelect = (option) => {
-    onSelect(option._id); // Pass _id to onSelect callback
+    onSelect(option?._id); // Pass _id to onSelect callback
     setOpen(false); // Close the dropdown after selection
   };
 
   if (!options) {
     return <div>Loading...</div>; // Handle loading state if options are null or undefined
   }
-  const filteredOptions = options.filter((option) => option._id == selectedValue);
+  const filteredOptions = options?.filter((option) => option?._id == selectedValue);
   console.log(filteredOptions[0]?.type)
   return (
     <div className="relative">
