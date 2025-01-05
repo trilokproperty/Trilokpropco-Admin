@@ -10,7 +10,7 @@ export const CustomSelectType = ({ options = [], selectedValue, onSelect }) => {
     setOpen(false); // Close the dropdown after selection
   };
 
-  if (!options.length) {
+  if (!options?.length) {
     return <div>Loading...</div>; // Handle loading state if options are empty
   }
 
