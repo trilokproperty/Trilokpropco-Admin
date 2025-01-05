@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 export const CustomSelectStatus = ({ options = [], selectedValue, onSelect }) => {
   const [open, setOpen] = useState(false);
   const [filteredOptions, setFilteredOptions] = useState([]);
-   console.log("filteredOptions", filteredOptions)
-  console.log("options", options)
+   console.log("filteredOptions", filteredOptions);
+  console.log("options", options);
   useEffect(() => {
     // Filter options to get the selected value
     const selectedOption = options?.filter((option) => option._id === selectedValue);
