@@ -30,7 +30,7 @@ export const CustomSelectStatus = ({ options, selectedValue, onSelect }) => {
         <div className="flex items-center">
           {isLoading ? (
             <span className="text-gray-400">Loading...</span>
-          ) : filteredOptions.length > 0 ? (
+          ) : filteredOptions?.length > 0 ? (
             <>
               <img
                 src={filteredOptions[0]?.image}
