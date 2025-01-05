@@ -3,26 +3,27 @@ import React, { useState, useEffect } from 'react';
 export const CustomSelectStatus = ({ options = [], selectedValue, onSelect }) => {
   const [open, setOpen] = useState(false);
   const [filteredOptions, setFilteredOptions] = useState([]);
-   console.log("filteredOptions", filteredOptions);
-  console.log("options", options);
+
+  console.log("filteredOptionsStatus", filteredOptions)
+  console.log("optionsStatus", options)
   useEffect(() => {
-    // Filter options to get the selected value
-    const selectedOption = options?.filter((option) => option._id === selectedValue);
-    setFilteredOptions(selectedOption);
+    if (options?.length) {
+      // Filter options to get the selected value
+      const selectedOption = options.filter((option) => option._id === selectedValue);
+      setFilteredOptions(selectedOption);
+    }
   }, [options, selectedValue]);
 
-  const toggleDropdown = () => {
-    setOpen(!open);
-  };
-
-  if (!options?.length) {
-    return <div>Loading...</div>; // Handle loading state if options are empty
-  }
+  const toggleDropdown = () => setOpen((prev) => !prev);
 
   const handleSelect = (option) => {
     onSelect(option?._id); // Pass _id to onSelect callback
     setOpen(false); // Close the dropdown after selection
   };
+
+  if (!options?.length) {
+    return <div>Loading...</div>; // Show loading state when options are empty
+  }
 
   return (
     <div className="relative">
@@ -71,14 +72,12 @@ export const CustomSelectStatus = ({ options = [], selectedValue, onSelect }) =>
             aria-activedescendant="listbox-option-0"
             className="max-h-56 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5"
           >
-            {options?.map((option) => (
+            {options.map((option) => (
               <li
                 key={option._id}
                 onClick={() => handleSelect(option)}
                 className={`${
-                  option?._id === selectedValue
-                    ? 'text-white bg-indigo-600'
-                    : 'text-gray-900'
+                  option._id === selectedValue ? 'text-white bg-indigo-600' : 'text-gray-900'
                 } cursor-default select-none relative py-2 pl-3 pr-9`}
               >
                 <div className="flex items-center">
@@ -89,16 +88,14 @@ export const CustomSelectStatus = ({ options = [], selectedValue, onSelect }) =>
                   />
                   <span
                     className={`${
-                      option?._id === selectedValue ? 'font-semibold' : 'font-normal'
+                      option._id === selectedValue ? 'font-semibold' : 'font-normal'
                     } block truncate`}
                   >
                     {option.status}
                   </span>
                 </div>
-                {option?._id === selectedValue && (
-                  <span
-                    className="absolute inset-y-0 right-0 flex items-center pr-4 text-white"
-                  >
+                {option._id === selectedValue && (
+                  <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-white">
                     <svg
                       className="h-5 w-5"
                       fill="currentColor"
