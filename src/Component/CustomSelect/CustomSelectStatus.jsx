@@ -15,6 +15,10 @@ export const CustomSelectStatus = ({ options = [], selectedValue, onSelect }) =>
     setOpen(!open);
   };
 
+  if (!options?.length) {
+    return <div>Loading...</div>; // Handle loading state if options are empty
+  }
+
   const handleSelect = (option) => {
     onSelect(option?._id); // Pass _id to onSelect callback
     setOpen(false); // Close the dropdown after selection
