@@ -2,7 +2,9 @@ import React, { useState } from "react";
 
 export const CustomSelectDeveloper = ({ options = [], selectedValue, onSelect }) => {
   const [open, setOpen] = useState(false);
-
+  console.log("optionsDeveloper", options);
+  console.log("selectedValueDeveloper", selectedValue);
+  
   console.log("optionsDeveloper", options);
   const toggleDropdown = () => setOpen(!open);
 
