@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-export const CustomSelectStatus = ({ options, selectedValue, onSelect }) => {
+export const CustomSelectStatus = ({ options = [], selectedValue, onSelect }) => {
   const [open, setOpen] = useState(false);
+  const [filteredOptions, setFilteredOptions] = useState([]);
+   console.log("filteredOptions", filteredOptions)
+  console.log("options", options)
+  useEffect(() => {
+    // Filter options to get the selected value
+    const selectedOption = options?.filter((option) => option._id === selectedValue);
+    setFilteredOptions(selectedOption);
+  }, [options, selectedValue]);
 
   const toggleDropdown = () => {
     setOpen(!open);
@@ -11,12 +19,6 @@ export const CustomSelectStatus = ({ options, selectedValue, onSelect }) => {
     onSelect(option?._id); // Pass _id to onSelect callback
     setOpen(false); // Close the dropdown after selection
   };
-
-  if (!options) {
-    return <div>Loading...</div>; // Handle loading state if options are null or undefined
-  }
-
-  const filteredOptions = options?.filter((option) => option._id === selectedValue);
 
   return (
     <div className="relative">
@@ -36,10 +38,10 @@ export const CustomSelectStatus = ({ options, selectedValue, onSelect }) => {
                 alt={filteredOptions[0]?.status || 'Option'}
                 className="h-6 w-6 rounded-full mr-2"
               />
-              <span>{filteredOptions[0]?.status || 'Select an option'}</span>
+              <span>{filteredOptions[0]?.status || 'Select a status'}</span>
             </>
           ) : (
-            <span>Select an option</span>
+            <span>Select a status</span>
           )}
         </div>
         <svg
