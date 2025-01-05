@@ -12,7 +12,7 @@ export const CustomSelectDeveloper = ({ options, selectedValue, onSelect }) => {
     setOpen(false); // Close the dropdown after selection
   };
 
-  if (!options || options.length === 0) {
+  if (!options || options?.length === 0) {
     return <div>Loading...</div>; // Handle loading or empty state
   }
 
