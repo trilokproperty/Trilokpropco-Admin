@@ -28,6 +28,7 @@ const AddProperty = () => {
 
     fetchPropertyData();
 }, [propertyToUpdate]);
+
   const [formData, setFormData] = useState({
     name: "",
     metaTitle: "",
@@ -92,6 +93,16 @@ const AddProperty = () => {
   const [developerData, setDeveloperData] = useState(null);
   const [cityData, setCityData] = useState(null);
   const [loading, setLoading] = useState(false);
+  
+  
+  console.log("formData.developer:", formData.developer);
+console.log("selectedDeveloper:", selectedDeveloper);
+
+  console.log("formData.type:", formData.type);
+console.log("selectedType:", selectedType);
+  
+  console.log("formData.type:", formData.status);
+console.log("selectedStatus:", selectedStatus);
   useEffect(() => {
     if (propertyToEdit) {
       setFormData(propertyToEdit);
