@@ -16,6 +16,7 @@ const AddProperty = () => {
   const { state } = useLocation();
   const [propertyToEdit, setPropertyToEdit] = useState()
   const propertyToUpdate = state?.property;
+  console.log("propertyToEdit", propertyToEdit)
   useEffect(() => {
     const fetchPropertyData = async () => {
         try {
@@ -95,7 +96,7 @@ const AddProperty = () => {
   const [loading, setLoading] = useState(false);
   
   
-  console.log("formData.developer:", formData.developer);
+  console.log("propertyToEdit:", propertyToEdit);
 console.log("selectedDeveloper:", selectedDeveloper);
 
   console.log("formData.type:", formData.type);
@@ -528,7 +529,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="checkbox"
             name="isFeatured"
-            checked={formData.isFeatured}
+            checked={formData?.isFeatured || propertyToEdit?.isFeatured}
             onChange={(e) => 
               setFormData((prevState) =>({
                 ...prevState,
@@ -546,7 +547,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="checkbox"
             name="exclusive"
-            checked={formData.exclusive}
+            checked={formData?.exclusive || propertyToEdit?.exclusive}
             onChange={(e) => 
               setFormData((prevState) =>({
                 ...prevState,
@@ -564,7 +565,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="name"
-            value={formData.name}
+            value={formData?.name || propertyToEdit?.name}
             onChange={handleChange}
             className="input input-bordered"
             required
@@ -576,7 +577,7 @@ const handleRemoveAmenity = (amenityId) => {
             <span className="label-text">Description</span>
           </label>
           <ReactQuill
-            value={formData.description}
+            value={formData?.description || propertyToEdit?.description}
             onChange={(value) =>
               setFormData({ ...formData, description: value })
             }
@@ -592,7 +593,7 @@ const handleRemoveAmenity = (amenityId) => {
             <span className="label-text">Property For</span>
           </label>
           <select className="border p-4 rounded-lg" 
-            value={formData.for}
+            value={formData?.for || propertyToEdit?.for}
             name="for"
             onChange={handleChange}
             required>
@@ -607,7 +608,7 @@ const handleRemoveAmenity = (amenityId) => {
             <span className="label-text">Property Category</span>
           </label>
           <select className="border p-4 rounded-lg" 
-            value={formData.category}
+            value={formData?.category || propertyToEdit?.category}
             name="category"
             onChange={handleChange}
             required>
@@ -623,7 +624,7 @@ const handleRemoveAmenity = (amenityId) => {
           </label>
           <CustomSelectType
             options={typeData}
-            selectedValue={formData?.type || selectedType}
+            selectedValue={formData?.type || propertyToEdit?.type}
             onSelect={(option) =>
               setFormData((prev) => ({ ...prev, type: option }))
             }
@@ -636,7 +637,7 @@ const handleRemoveAmenity = (amenityId) => {
           </label>
           <CustomSelectDeveloper
             options={developerData}
-            selectedValue={formData.developer || selectedDeveloper}
+            selectedValue={formData?.developer || propertyToEdit?.developer}
             onSelect={(option) =>
               setFormData((prev) => ({ ...prev, developer: option }))
             }
@@ -648,7 +649,7 @@ const handleRemoveAmenity = (amenityId) => {
             <span className="label-text">Location</span>
           </label>
           <select className="border p-4 rounded-lg" 
-            value={formData.location || selectedLocation}
+            value={formData?.location || propertyToEdit?.location}
             name="location"
             onChange={handleLocationChange}
             required>
@@ -663,7 +664,7 @@ const handleRemoveAmenity = (amenityId) => {
           </label>
           <CustomSelectStatus
             options={statusData}
-            selectedValue={formData.status || selectedStatus}
+            selectedValue={formData?.status || propertyToEdit?.status}
             onSelect={(option) =>
               setFormData((prev) => ({ ...prev, status: option }))
             }
@@ -677,7 +678,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="priceRange"
-            value={formData.priceRange}
+            value={formData?.priceRange || propertyToEdit?.priceRange}
             onChange={handleChange}
             className="input input-bordered"
             required
@@ -691,7 +692,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="size"
-            value={formData.size}
+            value={formData?.size || propertyToEdit?.size}
             onChange={handleChange}
             className="input input-bordered"
             required
@@ -705,7 +706,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="configuration"
-            value={formData.configuration}
+            value={formData?.configuration || propertyToEdit?.configuration}
             onChange={handleChange}
             className="input input-bordered"
             required
@@ -716,7 +717,7 @@ const handleRemoveAmenity = (amenityId) => {
             <span className="label-text">Amenities</span>
           </label>
           <div className="grid lg:grid-cols-3 gap-5 sm:grid-cols-1 md:grid-cols-3">
-            {amenitiesData.map((amenity) => (
+            {amenitiesData?.map((amenity) => (
               <div
                 key={amenity._id}
                 className="flex items-center border p-2 rounded w-max gap-2"
@@ -740,10 +741,10 @@ const handleRemoveAmenity = (amenityId) => {
           <div>
             <h3 className="text-2xl mt-10">Selected Amenities:</h3>
             <div className="mt-2 flex flex-wrap gap-1">
-              {selectedAmenities.length === 0 ? (
+              {selectedAmenities?.length === 0 ? (
                 <p>No amenity selected.</p>
               ) : (
-                selectedAmenities.map((amenity) => (
+                selectedAmenities?.map((amenity) => (
                   <div
                     key={amenity?._id}
                     className="flex items-center space-x-2 border p-2 rounded"
@@ -809,7 +810,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="possessionStart"
-            value={formData?.projectOverview?.possessionStart}
+            value={formData?.projectOverview?.possessionStart || propertyToEdit?.projectOverview?.possessionStart}
             onChange={(e) => handleNestedChange(e, ["projectOverview"])}
             className="input input-bordered"
             placeholder="Possession Start"
@@ -817,7 +818,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="landArea"
-            value={formData?.projectOverview?.landArea}
+            value={formData?.projectOverview?.landArea || propertyToEdit?.projectOverview?.landArea}
             onChange={(e) => handleNestedChange(e, ["projectOverview"])}
             className="input input-bordered mt-2"
             placeholder="Land Area"
@@ -825,7 +826,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="configuration"
-            value={formData?.projectOverview?.configuration}
+            value={formData?.projectOverview?.configuration || propertyToEdit?.projectOverview?.configuration}
             onChange={(e) => handleNestedChange(e, ["projectOverview"])}
             className="input input-bordered mt-2"
             placeholder="Configuration"
@@ -833,7 +834,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="flatArea"
-            value={formData?.projectOverview?.flatArea}
+            value={formData?.projectOverview?.flatArea || propertyToEdit?.projectOverview?.flatArea}
             onChange={(e) => handleNestedChange(e, ["projectOverview"])}
             className="input input-bordered mt-2"
             placeholder="Flat Area"
@@ -841,7 +842,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="priceRange"
-            value={formData?.projectOverview?.priceRange}
+            value={formData?.projectOverview?.priceRange || propertyToEdit?.projectOverview?.priceRange}
             onChange={(e) => handleNestedChange(e, ["projectOverview"])}
             className="input input-bordered mt-2"
             placeholder="Price Range"
@@ -849,7 +850,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="numberOfBlocks"
-            value={formData?.projectOverview?.numberOfBlocks}
+            value={formData?.projectOverview?.numberOfBlocks || propertyToEdit?.projectOverview?.numberOfBlocks}
             onChange={(e) => handleNestedChange(e, ["projectOverview"])}
             className="input input-bordered mt-2"
             placeholder="Number Of Blocks"
@@ -857,7 +858,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="elevation"
-            value={formData?.projectOverview?.elevation}
+            value={formData?.projectOverview?.elevation || propertyToEdit?.projectOverview?.elevation}
             onChange={(e) => handleNestedChange(e, ["projectOverview"])}
             className="input input-bordered mt-2"
             placeholder="Elevation"
@@ -865,7 +866,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="numberOfUnits"
-            value={formData?.projectOverview?.numberOfUnits}
+            value={formData?.projectOverview?.numberOfUnits || propertyToEdit?.projectOverview?.numberOfUnits}
             onChange={(e) => handleNestedChange(e, ["projectOverview"])}
             className="input input-bordered mt-2"
             placeholder="Number Of Units"
@@ -873,7 +874,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="RegistrationNo"
-            value={formData?.projectOverview?.RegistrationNo}
+            value={formData?.projectOverview?.RegistrationNo || propertyToEdit?.projectOverview?.RegistrationNo}
             onChange={(e) => handleNestedChange(e, ["projectOverview"])}
             className="input input-bordered mt-2"
             placeholder="Registration Number"
@@ -886,7 +887,7 @@ const handleRemoveAmenity = (amenityId) => {
           <label className="label">
             <span className="label-text">Price Details</span>
           </label>
-          {formData.priceDetails.map((priceDetail, index) => (
+          {formData?.priceDetails.map((priceDetail, index) => (
             <div
               key={index}
               className="flex items-center space-x-2 flex-wrap gap-2 mt-4 border-b-2 pb-4"
@@ -894,7 +895,7 @@ const handleRemoveAmenity = (amenityId) => {
               <input
                 type="text"
                 name="configuration"
-                value={priceDetail.configuration}
+                value={priceDetail?.configuration}
                 onChange={(e) => handleNestedChange(e, ["priceDetails", index])}
                 className="input input-bordered"
                 placeholder="Configuration"
@@ -902,7 +903,7 @@ const handleRemoveAmenity = (amenityId) => {
               <input
                 type="text"
                 name="size"
-                value={priceDetail.size}
+                value={priceDetail?.size}
                 onChange={(e) => handleNestedChange(e, ["priceDetails", index])}
                 className="input input-bordered"
                 placeholder="Size"
@@ -910,7 +911,7 @@ const handleRemoveAmenity = (amenityId) => {
               <input
                 type="text"
                 name="price"
-                value={priceDetail.price}
+                value={priceDetail?.price}
                 onChange={(e) => handleNestedChange(e, ["priceDetails", index])}
                 className="input input-bordered"
                 placeholder="Price"
@@ -938,7 +939,7 @@ const handleRemoveAmenity = (amenityId) => {
           <label className="label">
             <span className="label-text">Plans (To update plans delete previous one and add new plan/plans)</span>
           </label>
-          {formData.plans.map((plan, index) => (
+          {formData?.plans.map((plan, index) => (
             <div
               key={index}
               className="flex items-center space-x-2 flex-wrap gap-2 mt-4 border-b-2 pb-4"
@@ -946,7 +947,7 @@ const handleRemoveAmenity = (amenityId) => {
               <input
                 type="text"
                 name="planType"
-                value={plan.planType}
+                value={plan?.planType}
                 onChange={(e) => handleNestedChange(e, ["plans", index])}
                 className="input input-bordered"
                 placeholder="Plan Type"
@@ -961,7 +962,7 @@ const handleRemoveAmenity = (amenityId) => {
               <input
                 type="text"
                 name="size"
-                value={plan.size}
+                value={plan?.size}
                 onChange={(e) => handleNestedChange(e, ["plans", index])}
                 className="input input-bordered"
                 placeholder="Size"
@@ -969,12 +970,12 @@ const handleRemoveAmenity = (amenityId) => {
               <input
                 type="text"
                 name="price"
-                value={plan.price}
+                value={plan?.price}
                 onChange={(e) => handleNestedChange(e, ["plans", index])}
                 className="input input-bordered"
                 placeholder="Price"
               />
-              <img src={plan.image} className="h-[100px]" />
+              <img src={plan?.image} className="h-[100px]" />
                <button
                 type="button"
                 onClick={() => handleRemovePlan(index)}
@@ -1000,7 +1001,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="pdfDownload"
-            value={formData.pdfDownload}
+            value={formData?.pdfDownload || propertyToEdit?.pdfDownload}
             onChange={handleChange}
             className="input input-bordered"
             required
@@ -1012,7 +1013,7 @@ const handleRemoveAmenity = (amenityId) => {
             <span className="label-text">Nearby Facilities</span>
           </label>
           <ReactQuill
-            value={formData.nearbyFacilities}
+            value={formData?.nearbyFacilities || propertyToEdit?.nearbyFacilities}
             onChange={(value) =>
               setFormData({ ...formData, nearbyFacilities: value })
             }
@@ -1030,7 +1031,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="locationMap"
-            value={formData.locationMap}
+            value={formData?.locationMap || propertyToEdit?.locationMap}
             onChange={handleChange}
             className="input input-bordered"
             required
@@ -1042,7 +1043,7 @@ const handleRemoveAmenity = (amenityId) => {
             <span className="label-text">Specifications</span>
           </label>
           <ReactQuill
-            value={formData.specifications}
+            value={formData?.specifications || propertyToEdit?.specifications}
             onChange={(value) =>
               setFormData({ ...formData, specifications: value })
             }
@@ -1060,7 +1061,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="video"
-            value={formData.video}
+            value={formData?.video  || propertyToEdit?.video}
             onChange={handleChange}
             className="input input-bordered"
             required
@@ -1072,7 +1073,7 @@ const handleRemoveAmenity = (amenityId) => {
             <span className="label-text">Date</span>
           </label>
           <DateInput 
-  isoDateString={formData.created_at} 
+  isoDateString={formData?.created_at  || propertyToEdit?.created_at} 
   onChange={handleDateChange} 
 />
 
@@ -1116,7 +1117,7 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="text"
             name="metaTitle"
-            value={formData.metaTitle}
+            value={formData?.metaTitle  || propertyToEdit?.metaTitle}
             onChange={handleChange}
             className="input input-bordered"
             required
@@ -1128,7 +1129,7 @@ const handleRemoveAmenity = (amenityId) => {
           </label>
           <textarea
             name="metaDescription"
-            value={formData.metaDescription}
+            value={formData?.metaDescription  || propertyToEdit?.metaDescription}
             onChange={handleChange}
             className="textarea textarea-bordered"
             required
