@@ -33,11 +33,11 @@ export const CustomSelectType = ({ options = [], selectedValue, onSelect }) => {
           {selectedOption ? (
             <>
               <img
-                src={selectedOption.logo}
-                alt={selectedOption.type}
+                src={selectedOption? selectedOption.logo : ''}
+                alt={selectedOption? selectedOption.type : ''}
                 className="h-6 w-6 rounded-full mr-2"
               />
-              <span>{selectedOption.type}</span>
+              <span>{selectedOption? selectedOption.type : ''}</span>
             </>
           ) : (
             <span className="text-gray-500">Select an option</span>
