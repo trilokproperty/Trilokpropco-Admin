@@ -33,11 +33,11 @@ export const CustomSelectStatus = ({ options = [], selectedValue, onSelect }) =>
           {selectedOption ? (
             <>
               <img
-                src={selectedOption.image}
-                alt={selectedOption.status || 'Option'}
+                src={selectedOption? selectedOption.image : ''}
+                alt={selectedOption? selectedOption.status : ''}
                 className="h-6 w-6 rounded-full mr-2"
               />
-              <span>{selectedOption.status || 'Select a status'}</span>
+              <span>{selectedOption? selectedOption.status : ''}</span>
             </>
           ) : (
             <span className="text-gray-500">Select a status</span>
