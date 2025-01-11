@@ -30,11 +30,11 @@ if (!options?.length) {
           {selectedOption ? (
             <>
               <img
-                src={selectedOption.image}
-                alt={selectedOption.name}
+                src={selectedOption? selectedOption.image : ''}
+                alt={selectedOption? selectedOption.name : ''}
                 className="h-6 w-6 rounded-full"
               />
-              <span className="text-gray-700">{selectedOption.name}</span>
+              <span className="text-gray-700">{selectedOption? selectedOption.name : ''}</span>
             </>
           ) : (
             <span className="text-gray-500">Select a Developer</span>
