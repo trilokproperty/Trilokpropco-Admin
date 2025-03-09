@@ -16,7 +16,7 @@ const AddProperty = () => {
   const { state } = useLocation();
   const [propertyToEdit, setPropertyToEdit] = useState()
   const propertyToUpdate = state?.property;
-  console.log("propertyToEdit", propertyToEdit)
+  // console.log("propertyToEdit", propertyToEdit)
   useEffect(() => {
     const fetchPropertyData = async () => {
         try {
@@ -96,14 +96,14 @@ const AddProperty = () => {
   const [loading, setLoading] = useState(false);
   
   
-  console.log("propertyToEdit:", propertyToEdit);
-console.log("selectedDeveloper:", selectedDeveloper);
+//   console.log("propertyToEdit:", propertyToEdit);
+// console.log("selectedDeveloper:", selectedDeveloper);
 
-  console.log("formData.type:", formData.type);
-console.log("selectedType:", selectedType);
+//   console.log("formData.type:", formData.type);
+// console.log("selectedType:", selectedType);
   
-  console.log("formData.type:", formData.status);
-console.log("selectedStatus:", selectedStatus);
+//   console.log("formData.type:", formData.status);
+// console.log("selectedStatus:", selectedStatus);
   useEffect(() => {
     if (propertyToEdit) {
       setFormData(propertyToEdit);
@@ -307,7 +307,7 @@ console.log("selectedStatus:", selectedStatus);
         }
 
         const updatedProperty = await response.json();
-        console.log('Updated property after plan removal:', updatedProperty);
+        // console.log('Updated property after plan removal:', updatedProperty);
 
         // Optional: Provide user feedback (e.g., toast notification)
         alert('Plan deleted successfully!');
@@ -340,7 +340,7 @@ console.log("selectedStatus:", selectedStatus);
   const handleSubmit = async (e) => {
     e.preventDefault();
      // Check if formData has updated plans
-  console.log("Final formData before submitting to backend:", formData);
+  // console.log("Final formData before submitting to backend:", formData);
     
     if (loading) return;
   
