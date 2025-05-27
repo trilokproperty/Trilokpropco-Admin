@@ -181,6 +181,8 @@ const AddProperty = () => {
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
+    // console.log(files,154);
+    
     setFormData((prevState) => ({
       ...prevState,
       galleryImages: [...prevState.galleryImages, ...files],
@@ -230,6 +232,19 @@ const AddProperty = () => {
     }
   };
 
+  const handleGalleryImageDeleteAdd = (imageToRemove) => {
+    setFormData(prev => ({
+      ...prev,
+      galleryImages: prev.galleryImages.filter(img => img !== imageToRemove)
+    }));
+  };
+
+const handleBankImageDeleteAdd = (imageToRemove) => {
+  setFormData(prev => ({
+    ...prev,
+    bankImages: prev.bankImages.filter(img => img !== imageToRemove),
+  }));
+};
   const handleBankImageDelete = async (id, imageUrl) => {
     setLoading(true);
     try {
@@ -782,24 +797,43 @@ const handleRemoveAmenity = (amenityId) => {
             multiple
           />
           <div className="flex gap-2 my-5">
-          {
-           formData?.galleryImages?.map((img, index) => (
-            <div key={index} className="relative">
-              <img className="w-[100px] h-[100px]" src={img} />
-              {propertyToEdit && (
-  <button
-    type="button"
-    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"
-    onClick={() => handleGalleryImageDelete(propertyToEdit._id, img)}
-  >
-    <FaTrash />
-  </button>
-)}
+          {formData?.galleryImages?.map((img, index) => {
+              const isFile = img instanceof File;
+              const isImage = isFile
+                ? img.type?.startsWith("image/")
+                : typeof img === "string" && /\.(jpg|jpeg|png|webp|gif)$/i.test(img);
 
+              return (
+                <div key={index} className="relative">
+                  {isImage ? (
+                    <img
+                      className="w-[100px] h-[100px] object-cover rounded"
+                      src={isFile ? URL.createObjectURL(img) : img}
+                      alt={`Preview ${index}`}
+                    />
+                  ) : (
+                    <div className="w-[100px] h-[100px] bg-gray-100 flex items-center justify-center text-sm text-gray-500">
+                      Not an image
+                    </div>
+                  )}
+                  
+                  {/* {propertyToEdit && ( */}
+                    <button
+                      type="button"
+                      className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"
+                      onClick={() => {
+                        propertyToEdit
+                          ? handleGalleryImageDelete(propertyToEdit._id, img)
+                          : handleGalleryImageDeleteAdd(img);
+                      }}
+                    >
+                      <FaTrash />
+                    </button>
+                  {/* )} */}
+                </div>
+              );
+            })}
 
-            </div>
-           ))
-          }
           </div>
         </div>
 
@@ -940,7 +974,11 @@ const handleRemoveAmenity = (amenityId) => {
           <label className="label">
             <span className="label-text">Plans (To update plans delete previous one and add new plan/plans)</span>
           </label>
-          {formData?.plans.map((plan, index) => (
+          {formData?.plans.map((plan, index) => {
+            
+            const isFile = plan?.image instanceof File;
+            const imagePreview = isFile ? URL.createObjectURL(plan.image) : plan.image;
+            return (
             <div
               key={index}
               className="flex items-center space-x-2 flex-wrap gap-2 mt-4 border-b-2 pb-4"
@@ -976,7 +1014,9 @@ const handleRemoveAmenity = (amenityId) => {
                 className="input input-bordered"
                 placeholder="Price"
               />
-              <img src={plan?.image} className="h-[100px]" />
+              {imagePreview && (
+                <img src={imagePreview} className="h-[100px] rounded object-cover" alt="Plan Preview" />
+              )}
                <button
                 type="button"
                 onClick={() => handleRemovePlan(index)}
@@ -985,7 +1025,8 @@ const handleRemoveAmenity = (amenityId) => {
                 <FaTrash />
               </button>
             </div>
-          ))}
+          )
+          })}
           <button
             type="button"
             onClick={handleAddPlan}
@@ -1094,14 +1135,20 @@ const handleRemoveAmenity = (amenityId) => {
           <div className="flex gap-2 my-5 flex-wrap">
           {
            formData?.bankImages?.map((img, index) => (<div key={index} className="relative">
-            <img className="w-[100px] h-[100px]" src={img} />
-            {propertyToEdit &&( <button
+            <img className="w-[100px] h-[100px]" src={img instanceof File ? URL.createObjectURL(img) : img} />
+            {/* {propertyToEdit &&(  */}
+              <button
                     type="button"
                     className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"
-                    onClick={() => handleBankImageDelete(propertyToEdit._id, img)}
+                    onClick={() =>  {
+                      propertyToEdit
+                        ? handleBankImageDelete(propertyToEdit._id, img)
+                        : handleBankImageDeleteAdd(img);
+                    }}
                   >
                     <FaTrash />
-              </button>)}
+              </button>
+              {/* )} */}
             </div>
            ))
           }
