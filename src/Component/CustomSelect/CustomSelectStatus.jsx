@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 export const CustomSelectStatus = ({ options = [], selectedValue, onSelect }) => {
   const [open, setOpen] = useState(false);
 
-  console.log("optionsStatus.", options);
-  console.log("selectedValueStatus.", selectedValue);
+  // console.log("optionsStatus.", options);
+  // console.log("selectedValueStatus.", selectedValue);
   const toggleDropdown = () => setOpen((prev) => !prev);
 
   const handleSelect = (option) => {

@@ -26,8 +26,9 @@ const AddProperty = () => {
             console.error('Error fetching property data:', error);
         }
     };
-
-    fetchPropertyData();
+    if (propertyToUpdate?._id) {
+      fetchPropertyData();
+    }
 }, [propertyToUpdate]);
 
   const [formData, setFormData] = useState({
@@ -560,7 +561,7 @@ const handleRemoveAmenity = (amenityId) => {
 
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Name</span>
+            <span className="label-text">Name <span className="text-red-500">*</span></span>
           </label>
           <input
             type="text"
@@ -574,7 +575,7 @@ const handleRemoveAmenity = (amenityId) => {
 
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Description</span>
+            <span className="label-text">Description </span>
           </label>
           <ReactQuill
             value={formData?.description || propertyToEdit?.description}
@@ -584,13 +585,13 @@ const handleRemoveAmenity = (amenityId) => {
             className="quill-editor h-96 md:mb-20 rounded-lg mb-32" // Add your own class for styling
             modules={AddProperty.modules}
             formats={AddProperty.formats}
-            required
+            
           />
         </div>
 
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Property For</span>
+            <span className="label-text">Property For <span className="text-red-500">*</span></span>
           </label>
           <select className="border p-4 rounded-lg" 
             value={formData?.for || propertyToEdit?.for}
@@ -605,7 +606,7 @@ const handleRemoveAmenity = (amenityId) => {
         </div>
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Property Category</span>
+            <span className="label-text">Property Category <span className="text-red-500">*</span></span>
           </label>
           <select className="border p-4 rounded-lg" 
             value={formData?.category || propertyToEdit?.category}
@@ -646,7 +647,7 @@ const handleRemoveAmenity = (amenityId) => {
 
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Location</span>
+            <span className="label-text">Location <span className="text-red-500">*</span></span>
           </label>
           <select className="border p-4 rounded-lg" 
             value={formData?.location || propertyToEdit?.location}
@@ -673,7 +674,7 @@ const handleRemoveAmenity = (amenityId) => {
 
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Price Range</span>
+            <span className="label-text">Price Range <span className="text-red-500">*</span></span>
           </label>
           <input
             type="text"
@@ -687,7 +688,7 @@ const handleRemoveAmenity = (amenityId) => {
 
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Size</span>
+            <span className="label-text">Size <span className="text-red-500">*</span></span>
           </label>
           <input
             type="text"
@@ -701,7 +702,7 @@ const handleRemoveAmenity = (amenityId) => {
 
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Configuration</span>
+            <span className="label-text">Configuration <span className="text-red-500">*</span></span>
           </label>
           <input
             type="text"
@@ -996,7 +997,7 @@ const handleRemoveAmenity = (amenityId) => {
 
         <div className="form-control">
           <label className="label">
-            <span className="label-text">PDF Download</span>
+            <span className="label-text">PDF Download <span className="text-red-500">*</span></span>
           </label>
           <input
             type="text"
@@ -1020,13 +1021,12 @@ const handleRemoveAmenity = (amenityId) => {
             className="quill-editor h-20 mb-32 rounded-lg md:mb-20" 
             modules={AddProperty.modules}
             formats={AddProperty.formats}
-            required
           />
         </div>
 
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Location Map</span>
+            <span className="label-text">Location Map <span className="text-red-500">*</span></span>
           </label>
           <input
             type="text"
@@ -1050,13 +1050,13 @@ const handleRemoveAmenity = (amenityId) => {
             className="quill-editor h-20 mb-32 rounded-lg md:mb-20" 
             modules={AddProperty.modules}
             formats={AddProperty.formats}
-            required
+            
           />
         </div>
 
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Video</span>
+            <span className="label-text">Video <span className="text-red-500">*</span></span>
           </label>
           <input
             type="text"
@@ -1112,7 +1112,7 @@ const handleRemoveAmenity = (amenityId) => {
         <hr />
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Meta Title</span>
+            <span className="label-text">Meta Title <span className="text-red-500">*</span></span>
           </label>
           <input
             type="text"
@@ -1125,7 +1125,7 @@ const handleRemoveAmenity = (amenityId) => {
         </div>
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Meta Description</span>
+            <span className="label-text">Meta Description <span className="text-red-500">*</span></span>
           </label>
           <textarea
             name="metaDescription"
