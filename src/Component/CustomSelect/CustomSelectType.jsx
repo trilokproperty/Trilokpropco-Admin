@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 export const CustomSelectType = ({ options = [], selectedValue, onSelect }) => {
   const [open, setOpen] = useState(false);
-  console.log("optionsType.", options);
-  console.log("selectedValueType.", selectedValue);
+  // console.log("optionsType.", options);
+  // console.log("selectedValueType.", selectedValue);
   
   const toggleDropdown = () => setOpen((prev) => !prev);
 
