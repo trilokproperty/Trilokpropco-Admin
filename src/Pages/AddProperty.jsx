@@ -17,7 +17,6 @@ const AddProperty = () => {
   const [propertyToEdit, setPropertyToEdit] = useState()
   const propertyToUpdate = state?.property;
   // console.log("propertyToEdit", propertyToEdit)
-  useEffect(() => {
     const fetchPropertyData = async () => {
         try {
             const response = await axios.get(`${endPoint}/property/${propertyToUpdate?._id}`);
@@ -26,10 +25,16 @@ const AddProperty = () => {
             console.error('Error fetching property data:', error);
         }
     };
-    if (propertyToUpdate?._id) {
-      fetchPropertyData();
-    }
-}, [propertyToUpdate]);
+    
+    useEffect(() => {
+      if (propertyToUpdate?._id) {
+        fetchPropertyData();
+      }
+    }, [propertyToUpdate]);
+//     if (propertyToUpdate?._id) {
+//       fetchPropertyData();
+//     }
+// }, [propertyToUpdate]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -232,19 +237,21 @@ const AddProperty = () => {
     }
   };
 
-  const handleGalleryImageDeleteAdd = (imageToRemove) => {
+  const handleGalleryImageDeleteAdd = (indexToRemove) => {
     setFormData(prev => ({
       ...prev,
-      galleryImages: prev.galleryImages.filter(img => img !== imageToRemove)
+      galleryImages: prev.galleryImages.filter((_, index) => index !== indexToRemove),
     }));
   };
 
-const handleBankImageDeleteAdd = (imageToRemove) => {
-  setFormData(prev => ({
-    ...prev,
-    bankImages: prev.bankImages.filter(img => img !== imageToRemove),
-  }));
-};
+
+  const handleBankImageDeleteAdd = (indexToRemove) => {
+    setFormData(prev => ({
+      ...prev,
+      bankImages: prev.bankImages.filter((_, index) => index !== indexToRemove),
+    }));
+  };
+
   const handleBankImageDelete = async (id, imageUrl) => {
     setLoading(true);
     try {
@@ -355,100 +362,106 @@ const handleBankImageDeleteAdd = (imageToRemove) => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-     // Check if formData has updated plans
-  // console.log("Final formData before submitting to backend:", formData);
+      // Check if formData has updated plans
+    // console.log("Final formData before submitting to backend:", formData);
+      
+      if (loading) return;
     
-    if (loading) return;
-  
-    setLoading(true);
-  
-    const submissionData = new FormData();  // Create a new FormData object
-    const amenitiesIds = selectedAmenities.map(amenity => amenity._id);
-  
-    // Append simple form fields
-submissionData.append("name", formData.name);
-submissionData.append("metaTitle", formData.metaTitle);
-submissionData.append("metaDescription", formData.metaDescription);
-submissionData.append("type", formData.type || "");
-submissionData.append("developer", formData.developer || "");
-submissionData.append("location", formData.location || "");
-submissionData.append("status", formData.status || "");
-submissionData.append("priceRange", formData.priceRange || "");
-submissionData.append("configuration", formData.configuration || "");
-submissionData.append("size", formData.size || "");
-submissionData.append("video", formData.video || "");
-submissionData.append("category", formData.category || "");
-submissionData.append("description", formData.description || "");
-submissionData.append("nearbyFacilities", formData.nearbyFacilities || "");
-submissionData.append("locationMap", formData.locationMap || "");
-submissionData.append("pdfDownload", formData.pdfDownload || "");
-submissionData.append("specifications", formData.specifications || "");
-submissionData.append("for", formData.for || "");
-submissionData.append("created_at", formData.created_at || "");
-submissionData.append("isFeatured", formData.isFeatured);
-submissionData.append("exclusive", formData.exclusive);
+      setLoading(true);
+    
+      const submissionData = new FormData();  // Create a new FormData object
+      const amenitiesIds = selectedAmenities.map(amenity => amenity._id);
+    
+      // Append simple form fields
+  submissionData.append("name", formData.name);
+  submissionData.append("metaTitle", formData.metaTitle);
+  submissionData.append("metaDescription", formData.metaDescription);
+  submissionData.append("type", formData.type || "");
+  submissionData.append("developer", formData.developer || "");
+  submissionData.append("location", formData.location || "");
+  submissionData.append("status", formData.status || "");
+  submissionData.append("priceRange", formData.priceRange || "");
+  submissionData.append("configuration", formData.configuration || "");
+  submissionData.append("size", formData.size || "");
+  submissionData.append("video", formData.video || "");
+  submissionData.append("category", formData.category || "");
+  submissionData.append("description", formData.description || "");
+  submissionData.append("nearbyFacilities", formData.nearbyFacilities || "");
+  submissionData.append("locationMap", formData.locationMap || "");
+  submissionData.append("pdfDownload", formData.pdfDownload || "");
+  submissionData.append("specifications", formData.specifications || "");
+  submissionData.append("for", formData.for || "");
+  submissionData.append("created_at", formData.created_at || "");
+  submissionData.append("isFeatured", formData.isFeatured);
+  submissionData.append("exclusive", formData.exclusive);
 
-// Append amenities (assumes amenitiesIds is correctly set)
-submissionData.append("amenities", JSON.stringify(formData.amenities));
+  // Append amenities (assumes amenitiesIds is correctly set)
+  submissionData.append("amenities", JSON.stringify(formData.amenities));
 
-// Append gallery images
-if (Array.isArray(formData.galleryImages)) {
-    formData.galleryImages.forEach(image => {
-        if (image) { // Check if image is not empty
-            submissionData.append("galleryImages", image);
+  // Append gallery images
+  if (Array.isArray(formData.galleryImages)) {
+      formData.galleryImages.forEach(image => {
+          if (image) { // Check if image is not empty
+              submissionData.append("galleryImages", image);
+          }
+      });
+  }
+
+  // Append bank images
+  if (Array.isArray(formData.bankImages)) {
+      formData.bankImages.forEach(image => {
+          if (image) { // Check if image is not empty
+              submissionData.append("bankImages", image);
+          }
+      });
+  }
+
+    // Append plans data
+  if (Array.isArray(formData.plans) && formData.plans.length > 0) {
+    formData.plans.forEach((plan, index) => {
+
+        // Append non-file fields as individual fields
+        submissionData.append(`plans[${index}][planType]`, plan.planType || "");
+        submissionData.append(`plans[${index}][size]`, plan.size || "");
+        submissionData.append(`plans[${index}][price]`, plan.price || "");
+
+        // Append image file for the plan (without index in the field name)
+        if (plan.image) {
+            submissionData.append("plans", plan.image); // Now using "plans" without index
         }
     });
-}
+  }
 
-// Append bank images
-if (Array.isArray(formData.bankImages)) {
-    formData.bankImages.forEach(image => {
-        if (image) { // Check if image is not empty
-            submissionData.append("bankImages", image);
+  // Append the project overview
+  submissionData.append("projectOverview", JSON.stringify(formData.projectOverview));
+
+  // Append price details
+  submissionData.append("priceDetails", JSON.stringify(formData.priceDetails));
+    
+      try {
+        const response = propertyToEdit
+          ? await axios.put(`${endPoint}/property/${propertyToEdit._id}`, submissionData, {
+              headers: { 'Content-Type': 'multipart/form-data' },
+          })
+          : await axios.post(`${endPoint}/property`, submissionData, {
+              headers: { 'Content-Type': 'multipart/form-data' },
+          });
+
+        if (propertyToEdit) {
+          await fetchPropertyData(); // Refresh updated data from backend
+          toast.success('Property updated successfully!');
+        } else {
+          toast.success('Property created successfully!');
         }
-    });
-}
 
-   // Append plans data
-if (Array.isArray(formData.plans) && formData.plans.length > 0) {
-  formData.plans.forEach((plan, index) => {
-
-      // Append non-file fields as individual fields
-      submissionData.append(`plans[${index}][planType]`, plan.planType || "");
-      submissionData.append(`plans[${index}][size]`, plan.size || "");
-      submissionData.append(`plans[${index}][price]`, plan.price || "");
-
-      // Append image file for the plan (without index in the field name)
-      if (plan.image) {
-          submissionData.append("plans", plan.image); // Now using "plans" without index
+        // Handle success actions
+      } catch (error) {
+        console.error('Error submitting the form:', error);
+        toast.error('Error submitting property as '+ error?.response?.data?.message );
+      } finally {
+        setLoading(false);
       }
-  });
-}
-
-// Append the project overview
-submissionData.append("projectOverview", JSON.stringify(formData.projectOverview));
-
-// Append price details
-submissionData.append("priceDetails", JSON.stringify(formData.priceDetails));
-  
-    try {
-      const response = propertyToEdit
-        ? await axios.put(`${endPoint}/property/${propertyToEdit._id}`, submissionData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-        })
-        : await axios.post(`${endPoint}/property`, submissionData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-        });
-  
-      toast.success('Property submitted successfully!');
-      // Handle success actions
-    } catch (error) {
-      console.error('Error submitting the form:', error);
-      toast.error('Error submitting property.');
-    } finally {
-      setLoading(false);
-    }
-};
+  };
   
   const handleAmenitySelect = (amenity) => {
   if (!selectedAmenities.find((a) => a._id === amenity._id)) {
@@ -816,23 +829,26 @@ const handleRemoveAmenity = (amenityId) => {
                       Not an image
                     </div>
                   )}
-                  
-                  {/* {propertyToEdit && ( */}
-                    <button
-                      type="button"
-                      className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"
-                      onClick={() => {
-                        propertyToEdit
-                          ? handleGalleryImageDelete(propertyToEdit._id, img)
-                          : handleGalleryImageDeleteAdd(img);
-                      }}
-                    >
-                      <FaTrash />
-                    </button>
-                  {/* )} */}
+
+                  <button
+                    type="button"
+                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"
+                    onClick={() => {
+                      if (img instanceof File) {
+                        // Newly added file, delete by index
+                        handleGalleryImageDeleteAdd(index);
+                      } else {
+                        // Already uploaded image, delete via API
+                        handleGalleryImageDelete(propertyToEdit._id, img);
+                      }
+                    }}
+                  >
+                    <FaTrash />
+                  </button>
                 </div>
               );
             })}
+
 
           </div>
         </div>
@@ -1133,25 +1149,36 @@ const handleRemoveAmenity = (amenityId) => {
             multiple
           />
           <div className="flex gap-2 my-5 flex-wrap">
-          {
-           formData?.bankImages?.map((img, index) => (<div key={index} className="relative">
-            <img className="w-[100px] h-[100px]" src={img instanceof File ? URL.createObjectURL(img) : img} />
-            {/* {propertyToEdit &&(  */}
-              <button
-                    type="button"
-                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"
-                    onClick={() =>  {
-                      propertyToEdit
-                        ? handleBankImageDelete(propertyToEdit._id, img)
-                        : handleBankImageDeleteAdd(img);
-                    }}
-                  >
-                    <FaTrash />
-              </button>
-              {/* )} */}
-            </div>
-           ))
-          }
+          {formData?.bankImages?.map((img, index) => {
+            const isFile = img instanceof File;
+
+            return (
+              <div key={index} className="relative">
+                <img
+                  className="w-[100px] h-[100px]"
+                  src={isFile ? URL.createObjectURL(img) : img}
+                  alt={`Bank ${index}`}
+                />
+
+                <button
+                  type="button"
+                  className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"
+                  onClick={() => {
+                    if (isFile) {
+                      // Newly added, delete by index
+                      handleBankImageDeleteAdd(index);
+                    } else {
+                      // Already uploaded, delete via API
+                      handleBankImageDelete(propertyToEdit._id, img);
+                    }
+                  }}
+                >
+                  <FaTrash />
+                </button>
+              </div>
+            );
+          })}
+
           </div>
         </div>
         <hr />
