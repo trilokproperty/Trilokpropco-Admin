@@ -18,7 +18,7 @@ const Testimonials = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${endPoint}/testimonial`);
-        console.log(response.data);
+        // console.log(response.data);
         setTestimonials(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -60,7 +60,7 @@ const Testimonials = () => {
           },
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
       setTestimonials([...testimonials, response.data]);
       setLoading(false);
       toast.success("Testimonial successfully added!", {
@@ -85,7 +85,7 @@ const Testimonials = () => {
     try {
       const response = await axios.delete(`${endPoint}/testimonial/${id}`);
       setTestimonials(testimonials.filter((testimonial) => testimonial._id !== id));
-      console.log(response);
+      // console.log(response);
       toast.success("Testimonial successfully deleted!", {
         position: "top-center",
       });
@@ -172,14 +172,28 @@ const Testimonials = () => {
           <label className="label">
             <span className="label-text">Rating</span>
           </label>
-          <input
+          {/* <input
             type="number"
             name="rating"
             value={formData.rating}
             onChange={handleChange}
             className="input input-bordered"
             required
-          />
+          /> */}
+          
+          <select
+            name="rating"
+            value={formData.rating}
+            onChange={handleChange}
+            className="select select-bordered"
+            required
+          >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            </select>
         </div>
 
 
@@ -212,6 +226,7 @@ const Testimonials = () => {
             </div>
             <div>
             <div className="font-bold text-xl">{testimonial?.name}</div><div className="">{testimonial?.des}</div>
+            <div className="">({testimonial?.rating} Stars Rating)</div>
             </div>
           </div>
         </td>
