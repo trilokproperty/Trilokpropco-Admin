@@ -118,7 +118,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'changepass/:id',
-                element: <ChangePass />,
+                element: <PrivateRoute><ChangePass /></PrivateRoute>,
                 loader: ({ params }) => fetch(`${endPoint}/user/${params._id}`)
               },
         ]

@@ -339,11 +339,11 @@ const Dashboard = () => {
                 tabIndex={0}
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
               >
-                <li onClick={handleLogOut}>
-                  <a>Logout</a>
-                </li>
                 <li>
                  <Link to={`changepass/${user?._id}`}>Change Password</Link>
+                </li>
+                <li onClick={handleLogOut}>
+                  <a>Logout</a>
                 </li>
               </ul>
             </div>
