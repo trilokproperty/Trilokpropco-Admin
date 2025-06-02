@@ -118,7 +118,10 @@ const Properties = () => {
             </tr>
           </thead>
           <tbody>
-            {getVisibleProperties().map((property, index) => (
+            {getVisibleProperties().map((property, index) => {
+            const nameSlug = property?.name.replace(/\s+/g, '-');
+             return (
+
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>
@@ -148,12 +151,14 @@ const Properties = () => {
                   <button className="btn btn-error btn-xs text-white" onClick={() => handleDelete(property._id)}>
                     Delete
                   </button>
-                  <button className="btn btn-info btn-xs text-white" >
+                  <button className="btn btn-info btn-xs text-white" onClick={() => window.open(`https://trilokpropco.com/${property?.category}/${nameSlug}`)} >
                     View
                   </button>
                 </th>
               </tr>
-            ))}
+            )
+            }
+            )}
             {properties?.length === 0 && (
               <p className="p-5">No Property is available.</p>
             )}
