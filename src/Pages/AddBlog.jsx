@@ -22,7 +22,7 @@ const AddBlog = () => {
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  console.log(blogToEdit)
+  // console.log(blogToEdit)
   useEffect(() => {
     const fetchBlogData = async () => {
       if (blogToUpdate?._id) {

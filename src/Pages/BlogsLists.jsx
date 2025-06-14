@@ -10,7 +10,7 @@ const BlogsLists = () => {
     const navigate = useNavigate();
     const handleEdit = (blog) => {
       navigate("/addBlog", { state: { blog } });
-      console.log(blog)
+      // console.log(blog)
     };
     useEffect(() => {
       const fetchData = async () => {
