@@ -151,7 +151,7 @@ const Properties = () => {
                   <button className="btn btn-error btn-xs text-white" onClick={() => handleDelete(property._id)}>
                     Delete
                   </button>
-                  <button className="btn btn-info btn-xs text-white" onClick={() => window.open(`https://trilokpropco.com/${property?.category}/${nameSlug}`)} >
+                  <button className="btn btn-info btn-xs text-white" onClick={() => window.open(`https://trilokpropco.com/${property?.category}/${encodeURIComponent(nameSlug)}`)} >
                     View
                   </button>
                 </th>

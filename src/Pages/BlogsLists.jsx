@@ -90,7 +90,9 @@ const BlogsLists = () => {
           </thead>
           <tbody>
           {blogs?.length ? (
-              getVisibleBlogs().map((blog, index) => (
+              getVisibleBlogs().map((blog, index) => {
+                const locationNameSlug = blog?.title?.replace(/\s+/g, '_');
+                return (
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>
@@ -112,12 +114,13 @@ const BlogsLists = () => {
                 <th className="flex gap-2">
                   <button className="btn btn-success text-white btn-xs" onClick={() => handleEdit(blog)}>Update</button>
                   <button className="btn btn-error btn-xs text-white" onClick={() => handleDelete(blog?._id)}>Delete</button>
-                  <button className="btn btn-info btn-xs text-white" >
+                  <button className="btn btn-info btn-xs text-white" onClick={() => window.open(`https://trilokpropco.com/blog/${encodeURIComponent(locationNameSlug)}`)} >
                     View
-                  </button>
+                  </button> 
                 </th>
               </tr>
-            ))) : <tr><td colSpan="3" className="p-5 text-center">No blog is available.</td></tr>}
+            )}
+            )) : <tr><td colSpan="3" className="p-5 text-center">No blog is available.</td></tr>}
           </tbody>
         </table>
       </div> 

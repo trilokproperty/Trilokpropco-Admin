@@ -28,7 +28,7 @@ const AddBlog = () => {
       if (blogToUpdate?._id) {
         try {
           const response = await axios.get(
-            `${endPoint}/blog/${blogToUpdate?._id}`
+            `${endPoint}/blog/edit/${blogToUpdate?._id}`
           );
           setBlogToEdit(response.data);
         } catch (error) {
