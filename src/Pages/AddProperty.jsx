@@ -581,7 +581,11 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="checkbox"
             name="exclusive"
-            checked={formData?.exclusive || propertyToEdit?.exclusive}
+            checked={
+              formData?.hasOwnProperty("exclusive")
+                ? formData.exclusive
+                : propertyToEdit?.exclusive || false
+            }
             onChange={(e) => 
               setFormData((prevState) =>({
                 ...prevState,
