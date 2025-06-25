@@ -558,15 +558,20 @@ const handleRemoveAmenity = (amenityId) => {
           <input
             type="checkbox"
             name="isFeatured"
-            checked={formData?.isFeatured || propertyToEdit?.isFeatured}
-            onChange={(e) => 
-              setFormData((prevState) =>({
+            checked={
+              formData?.hasOwnProperty("isFeatured")
+                ? formData.isFeatured
+                : propertyToEdit?.isFeatured || false
+            }
+            onChange={(e) =>
+              setFormData((prevState) => ({
                 ...prevState,
-                isFeatured: e.target.checked
+                isFeatured: e.target.checked,
               }))
             }
             className="toggle toggle-primary"
           />
+
         </div>
 
         <div className="form-control">
